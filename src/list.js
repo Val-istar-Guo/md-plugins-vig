@@ -28,7 +28,7 @@ const parseList = lines => {
 };
 
 
-export default () => {
+export default () => ({
   name: 'list',
   input: 'blocks',
   parse: vel => {
@@ -68,4 +68,4 @@ export default () => {
     else if (group.length > 1) return new Group(group);
     return group[0];
   },
-};
+});

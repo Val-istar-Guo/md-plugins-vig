@@ -1,7 +1,7 @@
 import { TempN } from 'md-core/nodes';
 
 
-export default () => {
+export default () => ({
   name: 'normalize',
   input: 'source',
   parse: n => {
@@ -13,4 +13,4 @@ export default () => {
 
     return new TempN('blocks', [blocks]);
   }
-};
+});

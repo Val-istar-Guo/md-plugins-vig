@@ -73,7 +73,7 @@ const parseTHead = (aligns, maxL, line) => {
 };
 
 
-export default () => {
+export default () => ({
   name: 'table',
   input: 'blocks',
   parse: vel => {
@@ -120,4 +120,4 @@ export default () => {
     else if (group.length > 1) return new Group(group);
     return group[0];
   },
-};
+});

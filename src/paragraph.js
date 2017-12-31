@@ -3,7 +3,7 @@ import { TempN, TextN, Group, Node } from 'md-core/nodes';
 
 // const pattern = /(^.+?)(?:\n|$)(?:\s*\n)*([\s\S]*$)/
 
-export default () => {
+export default () => ({
   name: 'paragraph',
   input: 'blocks',
   parse: vel => {
@@ -43,4 +43,4 @@ export default () => {
     else if (group.length > 1) return new Group(group);
     return group[0];
   }
-};
+});

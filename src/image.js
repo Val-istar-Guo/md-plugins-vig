@@ -1,7 +1,7 @@
 import { Group, Node, TextN } from 'md-core/nodes';
 
 
-export default () => {
+export default () => ({
   name: 'image',
   input: 'inline',
   parse: vel => {
@@ -36,4 +36,4 @@ export default () => {
     else if (group.length > 1) return new Group(group);
     return group[0];
   },
-};
+});

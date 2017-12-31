@@ -3,7 +3,7 @@ import { Group, TextN } from 'md-core/nodes';
 
 // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
 const pattern = /\\([\\`\*_{}\[\]()#\+.!\-])/;
-export default () => {
+export default () => ({
   name: 'escaped',
   input: 'inline',
   parse: vel => {
@@ -36,4 +36,4 @@ export default () => {
     else if (group.length > 1) return new Group(group);
     return group[0];
   },
-};
+});
