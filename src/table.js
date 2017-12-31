@@ -73,7 +73,7 @@ const parseTHead = (aligns, maxL, line) => {
 };
 
 
-export default {
+export default () => {
   name: 'table',
   input: 'blocks',
   parse: vel => {

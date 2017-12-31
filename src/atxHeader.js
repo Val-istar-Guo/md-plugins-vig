@@ -1,8 +1,7 @@
 import { Group, Node, TextN, TempN } from 'md-core/nodes';
 
 
-// const pattern = /^(#{1,6})\s*(.*?)\s*#*\s*(?:\n|$)([\s\S]*$)/mg;
-export default {
+export default () => ({
   name: 'atxHeader',
   input: 'blocks',
   parse: function (vel) {
@@ -37,4 +36,4 @@ export default {
     else if (group.length > 1) return new Group(group);
     return group[0];
   }
-};
+});

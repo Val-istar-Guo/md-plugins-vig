@@ -8,7 +8,7 @@ const className = {
 }
 
 // const pattern = /^(?:([\s\S]*?)\n)?[ \t]*(([-_*])(?:[ \t]*\3){2,})[ \t]*(?:\n|$)([\s\S]*$)/;
-export default {
+export default () => {
   name: 'hr',
   input: 'blocks',
   parse: (vel, opts) => {

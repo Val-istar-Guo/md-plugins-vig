@@ -28,7 +28,7 @@ const parseList = lines => {
 };
 
 
-export default {
+export default () => {
   name: 'list',
   input: 'blocks',
   parse: vel => {

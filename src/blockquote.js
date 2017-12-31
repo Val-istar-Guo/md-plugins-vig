@@ -1,6 +1,6 @@
 import { Group, Node, TempN } from 'md-core/nodes';
 
-export default {
+export default () => {
   name: 'blockquote',
   input: 'blocks',
   parse: vel => {

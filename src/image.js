@@ -1,7 +1,7 @@
 import { Group, Node, TextN } from 'md-core/nodes';
 
 
-export default {
+export default () => {
   name: 'image',
   input: 'inline',
   parse: vel => {
