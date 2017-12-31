@@ -1,4 +1,4 @@
-import { TempN, TextN, Group, Node } from 'md-core/nodes';
+import { TempN, TextN, Group, Node } from 'md-core/dist/nodes';
 
 
 // const pattern = /(^.+?)(?:\n|$)(?:\s*\n)*([\s\S]*$)/

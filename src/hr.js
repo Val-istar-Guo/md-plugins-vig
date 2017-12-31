@@ -1,4 +1,4 @@
-import { Group, Node, TempN } from 'md-core/nodes';
+import { Group, Node, TempN } from 'md-core/dist/nodes';
 
 
 const className = {

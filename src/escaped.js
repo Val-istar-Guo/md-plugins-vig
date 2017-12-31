@@ -1,4 +1,4 @@
-import { Group, TextN } from 'md-core/nodes';
+import { Group, TextN } from 'md-core/dist/nodes';
 
 
 // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !

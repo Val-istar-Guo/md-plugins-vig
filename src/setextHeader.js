@@ -1,4 +1,4 @@
-import { Group, Node, TextN, TempN } from 'md-core/nodes';
+import { Group, Node, TextN, TempN } from 'md-core/dist/nodes';
 
 export default () => ({
   name: 'setext header',

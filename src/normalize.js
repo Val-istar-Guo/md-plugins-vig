@@ -1,4 +1,4 @@
-import { TempN } from 'md-core/nodes';
+import { TempN } from 'md-core/dist/nodes';
 
 
 export default () => ({

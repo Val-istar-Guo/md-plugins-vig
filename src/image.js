@@ -1,4 +1,4 @@
-import { Group, Node, TextN } from 'md-core/nodes';
+import { Group, Node, TextN } from 'md-core/dist/nodes';
 
 
 export default () => ({
