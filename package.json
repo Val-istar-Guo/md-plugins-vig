@@ -32,7 +32,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "md-core": "0.0.2-alpha.2",
+    "md-core": "0.0.2-alpha.3",
     "mocha": "^4.0.1",
     "rollup": "^0.51.5",
     "rollup-plugin-babel": "^3.0.3",

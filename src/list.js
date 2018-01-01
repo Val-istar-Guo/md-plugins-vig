@@ -1,5 +1,7 @@
-import { Group, Node, TextN, TempN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { Group, Node, TextN, TempN } = nodes;
 
 const parseList = lines => {
   const patt = /^ {0,3}([*+-]|\d+\.)(( +)(.*)((\n *[^*+-\s].*)|(\n\n? \3.*))*)/mg

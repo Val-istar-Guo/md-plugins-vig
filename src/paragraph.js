@@ -1,7 +1,7 @@
-import { TempN, TextN, Group, Node } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
 
-// const pattern = /(^.+?)(?:\n|$)(?:\s*\n)*([\s\S]*$)/
+const { TempN, TextN, Group, Node } = nodes;
 
 export default () => ({
   name: 'paragraph',

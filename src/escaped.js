@@ -1,5 +1,7 @@
-import { Group, TextN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { Group, TextN } = nodes;
 
 // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
 const pattern = /\\([\\`\*_{}\[\]()#\+.!\-])/;

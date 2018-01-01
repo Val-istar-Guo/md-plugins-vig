@@ -7,7 +7,7 @@ export default {
     file: 'dist/bundle.js',
     format: 'cjs',
   },
-  external: ['md-core/dist/nodes'],
+  external: ['md-core'],
 
   plugins: [
     resolve(),

@@ -1,5 +1,7 @@
-import { Group, Node, TempN, TextN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { Group, Node, TempN, TextN } = nodes;
 
 const splitTr = str => str.replace(/(^\s*)|(\s*\|?\s*$)/g, "").split(/\s*\|\s*/)
 // aligns

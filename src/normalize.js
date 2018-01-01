@@ -1,5 +1,7 @@
-import { TempN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { TempN } = nodes;
 
 export default () => ({
   name: 'normalize',

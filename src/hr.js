@@ -1,5 +1,7 @@
-import { Group, Node, TempN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { Group, Node, TempN } = nodes;
 
 const className = {
   '-': 'dash',

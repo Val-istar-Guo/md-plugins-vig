@@ -1,5 +1,7 @@
-import { Group, Node, TextN } from 'md-core/dist/nodes';
+import { nodes } from 'md-core';
 
+
+const { Group, Node, TextN } = nodes;
 
 export default () => ({
   name: 'hyperlink',
