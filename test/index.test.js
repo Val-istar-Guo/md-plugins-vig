@@ -4,7 +4,7 @@ import {
   normalize, atxHeader, setextHeader,
   hr, list, blockquote, table, code, paragraph,
   hyperlink, image, autolink, escaped,
-  inlineCode, inlineBold,
+  inlineCode, inlineBold, inlineItalics,
 } from '../src';
 
 
@@ -20,14 +20,15 @@ const md = mdf()
   .use(paragraph())
   .use(inlineCode())
   .use(inlineBold())
+  .use(inlineItalics())
   .use(hyperlink())
   .use(image())
   .use(autolink())
   .use(escaped());
 
 const str = `
-aaaaa**bb**aaa
-aaaaa__bb__aaa
+aaaaa*bb*aaa
+aaaaa_bb_aaa
 `;
 
 describe('myMd', function () {

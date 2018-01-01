@@ -13,3 +13,4 @@ export { default as table } from './table';
 export { default as list } from './list';
 export { default as inlineCode } from './inlineCode';
 export { default as inlineBold } from './inlineBold';
+export { default as inlineItalics } from './inlineItalics';
