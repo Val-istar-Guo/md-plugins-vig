@@ -29,9 +29,10 @@ export default () => ({
       }
 
       const [code] = next;
-      const pre$ = new Node('pre', [code]);
-      const code$ = new Node(`code`, [pre$]);
-      group.push(code$);
+      console.log(code.replace(/^( {0,3}\t| {4})/mg, ''));
+      const code$ = new Node('code', [code.replace(/^( {0,3}\t| {4})/mg, '')]);
+      const pre$ = new Node('pre', [code$]);
+      group.push(pre$);
     }
 
     if (!group.length) return vel;

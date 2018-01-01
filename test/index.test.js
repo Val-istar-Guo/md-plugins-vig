@@ -29,10 +29,8 @@ const md = mdf()
   .use(escaped());
 
 const str = `
-\`\`\`
-code
-code
-\`\`\`
+     code
+    code
 `;
 
 describe('myMd', function () {
