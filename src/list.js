@@ -58,7 +58,6 @@ export default () => ({
       const [list, prefix] = next;
       const items = parseList(list);
       let list$;
-      console.log(items);
 
       if (/[*+-]/.test(prefix)) list$ = new Node('ul', items);
       else list$ = new Node('ol', items);

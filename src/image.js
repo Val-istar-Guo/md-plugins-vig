@@ -28,7 +28,6 @@ export default () => ({
         group.push(new TextN('inline', inline));
       }
 
-      console.log(next);
       const [, alt, src, , title] = next;
       const img$ = new Node('img', { alt, src, title });
       group.push(img$);

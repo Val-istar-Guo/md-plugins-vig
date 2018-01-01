@@ -50,7 +50,6 @@ const fillTr = (maxL,line) => {
 const parseTr = (aligns, maxL, childTag = 'td') => tr => {
   const children$ = fillTr(maxL, tr)
     .map((child, i) => {
-      console.log(child);
       const inline$ = new TextN('inline', child);
       return new Node(childTag, {
         class: alignClassEnum[aligns[i]],
@@ -105,8 +104,6 @@ export default () => ({
         .replace(/(^\n)|(\n$)/g, "")
         .split('\n')
         .map(splitTr);
-
-      console.log('table', lines);
 
       const maxL = Math.max(...lines.map(line => line.length));
       const [thead, align, ...tbody] = lines;

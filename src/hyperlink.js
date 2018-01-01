@@ -28,7 +28,6 @@ export default () => ({
         group.push(new TextN('inline', inline));
       }
 
-      console.log(next);
       const [, text, href, , title] = next;
       const inline$ = new TextN('inline', text);
       const hyperlink$ = new Node('a', { href, title }, [inline$]);
