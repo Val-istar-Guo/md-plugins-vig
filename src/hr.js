@@ -30,7 +30,7 @@ export default () => ({
         break;
       }
 
-      if (next.index) {
+      if (next.index !== lastIndex) {
         const blocks = str.substring(lastIndex, next.index);
         group.push(new TempN('blocks', [blocks]));
       }

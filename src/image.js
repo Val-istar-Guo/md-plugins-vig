@@ -23,7 +23,7 @@ export default () => ({
         break;
       }
 
-      if (next.index) {
+      if (next.index !== lastIndex) {
         const inline = str.substring(lastIndex, next.index);
         group.push(new TextN('inline', inline));
       }
