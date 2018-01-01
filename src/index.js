@@ -11,3 +11,4 @@ export { default as hyperlink } from './hyperlink';
 export { default as image } from './image';
 export { default as table } from './table';
 export { default as list } from './list';
+export { default as inlineCode } from './inlineCode';
