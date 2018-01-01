@@ -5,6 +5,7 @@ import {
   hr, list, blockquote, table, code, paragraph,
   hyperlink, image, autolink, escaped,
   inlineCode, inlineBold, inlineItalics,
+  coseLineCode,
 } from '../src';
 
 
@@ -16,6 +17,7 @@ const md = mdf()
   .use(list())
   .use(blockquote())
   .use(table())
+  .use(coseLineCode())
   .use(code())
   .use(paragraph())
   .use(inlineCode())
@@ -27,8 +29,10 @@ const md = mdf()
   .use(escaped());
 
 const str = `
-aaaaa*bb*aaa
-aaaaa_bb_aaa
+\`\`\`
+code
+code
+\`\`\`
 `;
 
 describe('myMd', function () {

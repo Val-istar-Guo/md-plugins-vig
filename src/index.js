@@ -14,3 +14,4 @@ export { default as list } from './list';
 export { default as inlineCode } from './inlineCode';
 export { default as inlineBold } from './inlineBold';
 export { default as inlineItalics } from './inlineItalics';
+export { default as coseLineCode } from './coseLineCode';
