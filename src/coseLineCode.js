@@ -9,7 +9,7 @@ export default () => ({
   parse: vel => {
     const str = vel.children[0];
     // const patt = /^(?:(?: {0,3}\t| {4}).*(?:\n|$))+/mg;
-    const patt = /^(`{3,})(.*)\n((?:.*\n)*)\1/mg;
+    const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
     const group = [];
 
     while(true) {
