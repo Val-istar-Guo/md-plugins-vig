@@ -1,5 +1,7 @@
+import fs from 'fs';
+import { join } from 'path';
 import { expect } from 'chai';
-import mdf from 'md-core';
+import md from 'md-core';
 import {
   normalize, atxHeader, setextHeader,
   hr, list, blockquote, table, code, paragraph,
@@ -8,17 +10,16 @@ import {
   coseLineCode,
 } from '../src';
 
-
-const md = mdf()
+const parse = md({ debug : true })
   .use(normalize())
+  .use(coseLineCode())
+  .use(code())
   .use(atxHeader())
   .use(setextHeader())
   .use(hr())
   .use(list())
   .use(blockquote())
   .use(table())
-  .use(coseLineCode())
-  .use(code())
   .use(paragraph())
   .use(inlineCode())
   .use(inlineBold())
@@ -26,15 +27,16 @@ const md = mdf()
   .use(hyperlink())
   .use(image())
   .use(autolink())
-  .use(escaped());
+  .use(escaped())
+  .parse
 
-const str = `
-     code
-    code
-`;
+const article = fs.readFileSync(join(__dirname, './article.test.md'), 'utf8');
 
-describe('myMd', function () {
-  it('', function () {
-    console.log(md.parse(str).toHtml());
-  });
-});
+fs.writeFileSync(join(__dirname, './result.test.html'), parse(article).toHTML());
+
+// describe('# all', function () {
+//   it('shoule parse article', function () {
+//     expect(parse(article).toHTML())
+//       .to.equal('');
+//   })
+// });
