@@ -1,5 +1,5 @@
 import { nodes } from 'md-core';
-import { block, isVNode } from './nodes';
+import { block } from './nodes';
 
 
 const { vnode } = nodes;
