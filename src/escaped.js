@@ -1,41 +1,20 @@
 import { nodes } from 'md-core';
+import splitInline from './utils/splitInline';
 
 
-const { Group, TextN } = nodes;
+const { vtext } = nodes;
 
 // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
-const pattern = /\\([\\`\*_{}\[\]()#\+.!\-])/;
 export default () => ({
   name: 'escaped',
   input: 'inline',
-  parse: vel => {
-    const str = vel.children[0];
+  parse: node => {
     const patt = /\\([\\`\*_{}\[\]()#\+.!\-])/g;
-    const group = [];
+    const group = splitInline(node, patt, matched =>
+      vtext(matched[1]).nameAs('escaped')
+    );
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const inline = str.substr(lastIndex);
-          group.push(new TextN('inline', inline));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const inline = str.substring(lastIndex, next.index);
-        group.push(new TextN('inline', inline));
-      }
-
-      const escaped$ = new TextN('escaped', next[1]);
-      group.push(escaped$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

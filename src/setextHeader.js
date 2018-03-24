@@ -1,41 +1,24 @@
 import { nodes } from 'md-core';
+import splitBlock from './utils/splitBlock';
+import { inline } from './nodes';
 
 
-const { Group, Node, TextN, TempN } = nodes;
+const { vnode } = nodes;
 
 export default () => ({
   name: 'setext header',
-  input: 'blocks',
-  parse: vel => {
-    const str = vel.children[0];
+  input: 'block',
+  parse: node => {
     const patt = /(.*)\n([-=])\2\2+(?:\n|$)/g;
-    const group = [];
+    const group = splitBlock(node, patt, matched => {
+      const tagName = matched[2] === '=' ? 'h1' : 'h2';
+      const inline$ = inline(matched[1]);
+      const header$ = vnode(tagName, [inline$]);
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
+      return header$;
+    })
 
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const tagName = next[2] === '=' ? 'h1' : 'h2';
-      const inline$ = new TextN('inline', next[1]);
-      const header$ = new Node(tagName, [inline$]);
-      group.push(header$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

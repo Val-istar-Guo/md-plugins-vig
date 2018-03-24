@@ -1,42 +1,25 @@
 import { nodes } from 'md-core';
+import splitBlock from './utils/splitBlock';
+import { block } from './nodes';
 
 
-const { Group, Node, TextN, TempN } = nodes;
+const { vnode, vtext } = nodes;
 
 export default () => ({
   name: 'code',
-  input: 'blocks',
-  parse: vel => {
-    const str = vel.children[0];
-    // const patt = /^(?:(?: {0,3}\t| {4}).*(?:\n|$))+/mg;
+  input: 'block',
+  parse: node => {
     const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
-    const group = [];
+    const group = splitBlock(node, patt, matched => {
+      const [, , lang, code] = matched
+      const text = vtext(code).nameAs('plain code')
+      const code$ = vnode('code', { class: lang }, [code])
+      const pre$ = vnode('pre', [code$])
+      return pre$
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
+    });
 
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const [, , lang, code] = next;
-      const code$ = new Node('code', { class: lang }, [code]);
-      const pre$ = new Node('pre', [code$]);
-      group.push(pre$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group
+    return node
   },
 });

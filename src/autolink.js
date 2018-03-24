@@ -1,13 +1,14 @@
 import { nodes } from 'md-core';
+import { inline } from './nodes';
 
 
-const { Group, Node, TextN } = nodes;
+const { vnode } = nodes;
 
 export default () => ({
   name: 'autolink',
   input: 'inline',
-  parse: vel => {
-    const str = vel.children[0];
+  parse: node => {
+    const str = node.text;
     const patt = /<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/g;
     const group = [];
 
@@ -17,37 +18,28 @@ export default () => ({
 
       if (!next) {
         if (lastIndex && lastIndex < str.length) {
-          const inline = str.substr(lastIndex);
-          group.push(new TextN('inline', [inline]));
+          group.push(inline(str.substr(lastIndex)));
         }
         break;
       }
 
       if (next.index !== lastIndex) {
-        const inline = str.substring(lastIndex, next.index);
-        group.push(new TextN('inline', [inline]));
+        group.push(inline(str.substring(lastIndex, next.index)));
       }
 
       let a$;
       const [, uri, protocol, email] = next;
       if (email) {
-        a$ = new Node('a', {
-          href: `mailto:${email}`,
-        }, [email]);
+        a$ = vnode('a', { href: `mailto:${email}` }, [email]);
       } else if (protocol === "mailto") {
-        a$ = new Node('a', {
-          href: encodeURI(uri),
-        }, [uri.substr("mailto:".length)]);
+        a$ = vnode('a', { href: encodeURI(uri) }, [uri.substr("mailto:".length)]);
       } else {
-        a$ = new Node('a', {
-          href: uri,
-        }, [uri]);
+        a$ = vnode('a', { href: uri, }, [uri]);
       }
       group.push(a$);
     }
 
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

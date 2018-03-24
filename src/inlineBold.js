@@ -1,7 +1,8 @@
 import { nodes } from 'md-core';
+import splitInline from './utils/splitInline';
 
 
-const { Group, Node, TextN } = nodes;
+const { vnode } = nodes;
 
 const className = {
   '**': 'asterisk',
@@ -11,35 +12,14 @@ const className = {
 export default () => ({
   name: 'inlineCode',
   input: 'inline',
-  parse: vel => {
-    const str = vel.children[0];
+  parse: node => {
     const patt = /([*_]{2})(.*?)\1/g;
-    const group = [];
+    const group = splitInline(node, patt, matched => {
+      const [, mark, strong] = matched;
+      return vnode('strong', { class: className[mark] }, [strong]);
+    })
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const inline = str.substr(lastIndex);
-          group.push(new TextN('inline', inline));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const inline = str.substring(lastIndex, next.index);
-        group.push(new TextN('inline', inline));
-      }
-
-      const [, mark, strong] = next;
-      const strong$ = new Node('strong', { class: className[mark] }, [strong]);
-      group.push(strong$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

@@ -1,41 +1,23 @@
 import { nodes } from 'md-core';
+import { inline, block } from './nodes';
+import splitBlock from './utils/splitBlock';
 
 
-const { Group, Node, TextN, TempN } = nodes;
+const { vnode } = nodes;
 
 export default () => ({
   name: 'atxHeader',
-  input: 'blocks',
-  parse: function (vel) {
-    const str = vel.children[0];
+  input: 'block',
+  parse: node => {
     const patt = /^(#{1,6})\s*(.*?)\s*#*\s*(?:\n|$)/mg;
-    const group = [];
+    const group = splitBlock(node, patt, matched => {
+      const [, leave, header] = matched;
+      const inline$ = inline(header);
+      const header$ = vnode(`h${leave.length}`, [inline$]);
+      return header$;
+    });
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const [, leave, header] = next;
-      const inline$ = new TextN('inline', header);
-      const header$ = new Node(`h${leave.length}`, [inline$]);
-      group.push(header$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   }
 });

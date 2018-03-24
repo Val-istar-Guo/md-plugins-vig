@@ -1,40 +1,20 @@
 import { nodes } from 'md-core';
+import splitInline from './utils/splitInline';
 
 
-const { Group, Node, TextN } = nodes;
+const { vnode, vtext } = nodes;
 
 export default () => ({
   name: 'inlineCode',
   input: 'inline',
-  parse: vel => {
-    const str = vel.children[0];
+  parse: node => {
     const patt = /(`+)(.*?)\1/g;
-    const group = [];
+    const group = splitInline(node, patt, matched => {
+      const codeText = vtext(matched[2]).nameAs('inline code')
+      return vnode('code', [codeText]);
+    })
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const inline = str.substr(lastIndex);
-          group.push(new TextN('inline', inline));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const inline = str.substring(lastIndex, next.index);
-        group.push(new TextN('inline', inline));
-      }
-
-      const code = next[2];
-      const code$ = new Node('code', [code]);
-      group.push(code$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

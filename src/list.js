@@ -1,7 +1,9 @@
 import { nodes } from 'md-core';
+import { inline, block } from './nodes';
+import splitBlock from './utils/splitBlock';
 
 
-const { Group, Node, TextN, TempN } = nodes;
+const { vnode } = nodes;
 
 const parseList = lines => {
   const patt = /^ {0,3}([*+-]|\d+\.)(( +)(.*)((\n *[^*+-\s].*)|(\n\n? \3.*))*)/mg
@@ -16,11 +18,10 @@ const parseList = lines => {
     content = content.replace(/^ {0,4}/mg, '');
 
     if (/\n/.test(content)) {
-      const blocks$ = new TempN('blocks', [content]);
-      li$ = new Node('li', [blocks$]);
+      li$ = vnode('li', [block(content)]);
     } else {
-      const inline$ = new TextN('inline', content);
-      li$ = new Node('li', [inline$]);
+      const inline$ =
+      li$ = vnode('li', [inline(content)]);
     }
 
     list.push(li$);
@@ -32,41 +33,21 @@ const parseList = lines => {
 
 export default () => ({
   name: 'list',
-  input: 'blocks',
-  parse: vel => {
-    const str = vel.children[0];
+  input: 'block',
+  parse: node => {
     const patt = /^( {0,3}([*+-]|\d+\.)( +)(.*)((\n *[^*+-\s].*)|(\n\n? \3.*))*(?:\n|$))+/mg
-    const group = [];
-
-    while (true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const [list, prefix] = next;
+    const group = splitBlock(node, patt, matched => {
+      const [list, prefix] = matched;
       const items = parseList(list);
       let list$;
 
-      if (/[*+-]/.test(prefix)) list$ = new Node('ul', items);
-      else list$ = new Node('ol', items);
+      if (/[*+-]/.test(prefix)) list$ = vnode('ul', items);
+      else list$ = vnode('ol', items);
 
-      group.push(list$);
-    }
+      return list$;
+    });
 
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

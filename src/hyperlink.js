@@ -1,41 +1,23 @@
 import { nodes } from 'md-core';
+import { inline } from './nodes';
+import splitInline from './utils/splitInline';
 
 
-const { Group, Node, TextN } = nodes;
+const { vnode } = nodes;
 
-export default () => ({
+export default (option = {}) => ({
   name: 'hyperlink',
   input: 'inline',
-  parse: vel => {
-    const str = vel.children[0];
-    const patt = /\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)\s*(?:(["'])(\S*?)\3)?\)/g;
-    const group = [];
+  parse: node => {
+    const patt = /\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g;
+    const { placeholder } = option;
+    const group = splitInline(node, patt, matched => {
+      const [, text, href = placeholder, , title] = matched;
+      const inline$ = inline(text);
+      return vnode('a', { href: href || placeholder, title }, [inline$]);
+    })
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const inline = str.substr(lastIndex);
-          group.push(new TextN('inline', inline));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const inline = str.substring(lastIndex, next.index);
-        group.push(new TextN('inline', inline));
-      }
-
-      const [, text, href, , title] = next;
-      const inline$ = new TextN('inline', text);
-      const hyperlink$ = new Node('a', { href, title }, [inline$]);
-      group.push(hyperlink$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });

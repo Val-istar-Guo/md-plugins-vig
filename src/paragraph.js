@@ -1,46 +1,26 @@
 import { nodes } from 'md-core';
+import splitBlock from './utils/splitBlock';
+import { inline } from './nodes';
 
 
-const { TempN, TextN, Group, Node } = nodes;
+const { vnode, vtext } = nodes;
 
 export default () => ({
   name: 'paragraph',
-  input: 'blocks',
-  parse: vel => {
-    const str = vel.children[0];
+  input: 'block',
+  parse: node => {
     const patt = /([\s\S]+?)(?:(?:\n(?:\s*\n)+)|$)/g;
-    const group = [];
-
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const p = next[0].replace(/\s*\n/g, '');
+    const group = splitBlock(node, patt, matched => {
+      const p = matched[0].replace(/\s*\n/g, '');
       if (p.length) {
-        const inline$ = new TextN('inline', p);
-        const p$ = new Node('p', [inline$]);
-        group.push(p$);
-      } else {
-        const empty$ = new TextN('empty', '');
-        group.push(empty$);
+        const inline$ = inline(p)
+        return vnode('p', [inline$]);
       }
-    }
 
-    if (!group.length) return ;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+      return vtext('');
+    })
+
+    if (group.length) return group;
+    return node;
   }
 });

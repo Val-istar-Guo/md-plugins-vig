@@ -1,7 +1,8 @@
 import { nodes } from 'md-core';
+import splitBlock from './utils/splitBlock';
 
 
-const { Group, Node, TempN } = nodes;
+const { vnode } = nodes;
 
 const className = {
   '-': 'dash',
@@ -12,35 +13,14 @@ const className = {
 // const pattern = /^(?:([\s\S]*?)\n)?[ \t]*(([-_*])(?:[ \t]*\3){2,})[ \t]*(?:\n|$)([\s\S]*$)/;
 export default () => ({
   name: 'hr',
-  input: 'blocks',
-  parse: (vel, opts) => {
+  input: 'block',
+  parse: (node, opts) => {
     const patt = /^[ \t]*(([-_*])(?:[ \t]*\2){2,})[ \t]*(?:\n|$)/mg;
-    const str = vel.children[0];
-    const group = [];
+    const group = splitBlock(node, patt, matched => (
+      vnode('hr', { class: className[matched[2]] })
+    ));
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
-
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          const blocks = str.substr(lastIndex);
-          group.push(new TempN('blocks', [blocks]));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        const blocks = str.substring(lastIndex, next.index);
-        group.push(new TempN('blocks', [blocks]));
-      }
-
-      const hr$ = new Node('hr');
-      group.push(hr$);
-    }
-
-    if (!group.length) return vel;
-    else if (group.length > 1) return new Group(group);
-    return group[0];
+    if (group.length) return group;
+    return node;
   },
 });
