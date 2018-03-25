@@ -32,14 +32,14 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "md-core": "0.0.2-alpha.3",
     "mocha": "^4.0.1",
-    "rollup": "^0.51.5",
+    "rollup": "^0.57.1",
     "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0"
   },
   "peerDependencies": {
-    "md-core": "0.0.2"
+    "md-core": "0.0.4"
   },
   "dependencies": {
     "highlight.js": "^9.12.0"
