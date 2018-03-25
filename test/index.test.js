@@ -7,13 +7,14 @@ import {
   hr, list, blockquote, table, code, paragraph,
   hyperlink, image, autolink, escaped,
   inlineCode, inlineBold, inlineItalics,
-  coseLineCode,
+  coseLineCode, highlight, html,
 } from '../src';
 
-const parse = md({ debug : true })
+const parse = md({ debug : false })
   .use(normalize())
   .use(coseLineCode())
   .use(code())
+  .use(highlight({ lineNumber: true }))
   .use(atxHeader())
   .use(setextHeader())
   .use(hr())
@@ -21,18 +22,30 @@ const parse = md({ debug : true })
   .use(blockquote())
   .use(table())
   .use(paragraph())
+  .use(escaped())
   .use(inlineCode())
   .use(inlineBold())
   .use(inlineItalics())
   .use(hyperlink())
   .use(image())
   .use(autolink())
-  .use(escaped())
+  .use(html())
   .parse
 
 const article = fs.readFileSync(join(__dirname, './article.test.md'), 'utf8');
 
-fs.writeFileSync(join(__dirname, './result.test.html'), parse(article).toHTML());
+const body = parse(article).toHTML();
+
+const content = `
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../node_modules/highlight.js/styles/github.css" />
+</head>
+<body>${body}</body>
+</html>
+`;
+
+fs.writeFileSync(join(__dirname, './result.test.html'), content);
 
 // describe('# all', function () {
 //   it('shoule parse article', function () {

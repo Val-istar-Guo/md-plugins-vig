@@ -15,3 +15,5 @@ export { default as inlineCode } from './inlineCode';
 export { default as inlineBold } from './inlineBold';
 export { default as inlineItalics } from './inlineItalics';
 export { default as coseLineCode } from './coseLineCode';
+export { default as highlight } from './highlight';
+export { default as html } from './html';

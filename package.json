@@ -40,5 +40,8 @@
   },
   "peerDependencies": {
     "md-core": "0.0.2"
+  },
+  "dependencies": {
+    "highlight.js": "^9.12.0"
   }
 }

@@ -1,9 +1,9 @@
 import { nodes } from 'md-core';
 import splitBlock from './utils/splitBlock';
-import { block } from './nodes';
+import { block, plainCode } from './nodes';
 
 
-const { vnode, vtext } = nodes;
+const { vnode } = nodes;
 
 export default () => ({
   name: 'code',
@@ -11,12 +11,11 @@ export default () => ({
   parse: node => {
     const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
     const group = splitBlock(node, patt, matched => {
-      const [, , lang, code] = matched
-      const text = vtext(code).nameAs('plain code')
-      const code$ = vnode('code', { class: lang }, [code])
+      const [, , lang, text] = matched
+      const text$ = plainCode(text, lang);
+      const code$ = vnode('code', { class: lang }, [text$])
       const pre$ = vnode('pre', [code$])
       return pre$
-
     });
 
     if (group.length) return group
