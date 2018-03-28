@@ -4,7 +4,7 @@ import { normalize, setextHeader } from '../src';
 
 
 describe('# setex header', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(setextHeader())
     .parse

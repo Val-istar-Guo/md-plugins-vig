@@ -1,11 +1,11 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitInline from './utils/splitInline';
 import { inline } from './nodes';
 
 
 const { html, isChild } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'html',
   input: 'inline',
   parse: node => {

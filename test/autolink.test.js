@@ -4,7 +4,7 @@ import { normalize, paragraph, autolink } from '../src';
 
 
 describe('# autolink', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(paragraph())
     .use(autolink())

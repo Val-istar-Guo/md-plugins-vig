@@ -3,7 +3,7 @@ import md from 'md-core';
 import { normalize, hr } from '../src';
 
 describe('# hr', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(hr())
     .parse

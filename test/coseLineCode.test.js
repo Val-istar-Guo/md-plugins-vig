@@ -41,7 +41,7 @@ export default {
 \`\`\`
 `
 describe('# cose line code', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(coseLineCode())
     .parse

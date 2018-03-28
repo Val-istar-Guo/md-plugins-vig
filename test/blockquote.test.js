@@ -4,7 +4,7 @@ import { normalize, blockquote, paragraph } from '../src';
 
 
 describe('# blockquote', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(blockquote())
     .use(paragraph())

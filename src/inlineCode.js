@@ -1,10 +1,10 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitInline from './utils/splitInline';
 
 
 const { vnode, vtext } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'inlineCode',
   input: 'inline',
   parse: node => {

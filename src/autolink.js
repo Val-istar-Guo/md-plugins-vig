@@ -1,10 +1,10 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import { inline } from './nodes';
 
 
 const { vnode } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'autolink',
   input: 'inline',
   parse: node => {

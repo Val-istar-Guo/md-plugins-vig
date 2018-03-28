@@ -1,7 +1,7 @@
 # MD-PLUGINS-VIG
 
-[![version](https://img.shields.io/npm/v/detect-env.svg?style=flat-square)](https://www.npmjs.com/package/detect-env)
-[![downloads](https://img.shields.io/npm/dm/detect-env.svg?style=flat-square)](https://www.npmjs.com/package/detect-env)
+[![version](https://img.shields.io/npm/v/md-plugins-vig.svg?style=flat-square)](https://www.npmjs.com/package/md-plugins-vig)
+[![downloads](https://img.shields.io/npm/dm/md-plugins-vig.svg?style=flat-square)](https://www.npmjs.com/package/md-plugins-vig)
 
 ## Support
 

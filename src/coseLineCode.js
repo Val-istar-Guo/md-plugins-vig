@@ -1,11 +1,11 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitBlock from './utils/splitBlock';
 import { block, plainCode } from './nodes';
 
 
 const { vnode } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'code',
   input: 'block',
   parse: node => {

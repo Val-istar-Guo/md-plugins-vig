@@ -4,7 +4,7 @@ import { normalize, paragraph, escaped } from '../src';
 
 
 describe('# escaped', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(paragraph())
     .use(escaped())

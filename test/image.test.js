@@ -11,10 +11,10 @@ const imageNoAlt = '![](www.image.link)';
 const imageNoAltButHaveTitle = '![](www.image.link "image title")';
 
 describe('# image', function () {
-  const parse = md({ debug: false })
+  const parse = md({ placeholder: '#' })
     .use(normalize())
     .use(paragraph())
-    .use(image({ placeholder: '#' }))
+    .use(image())
     .parse
 
   it(`should parse ${emptyImage}`, function () {

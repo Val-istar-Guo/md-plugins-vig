@@ -9,7 +9,7 @@ const linkWithTitleUseSigleQuotes = "[blog](miaooo.me 'my blog')"
 const emptyLink = '[blog]()';
 
 describe('# hyperlink', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(paragraph())
     .use(hyperlink({ placeholder: '#' }))

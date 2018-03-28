@@ -1,10 +1,10 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import { block } from './nodes';
 
 
 const { TempN } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'normalize',
   input: 'source',
   parse: node => {

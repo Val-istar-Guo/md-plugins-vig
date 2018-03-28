@@ -4,7 +4,7 @@ import { normalize, paragraph } from '../src';
 
 
 describe('# paragraph', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(paragraph())
     .parse;

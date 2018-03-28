@@ -1,4 +1,4 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import { inline, block } from './nodes';
 import splitBlock from './utils/splitBlock';
 
@@ -31,7 +31,7 @@ const parseList = lines => {
 };
 
 
-export default () => ({
+export default middleware({
   name: 'list',
   input: 'block',
   parse: node => {

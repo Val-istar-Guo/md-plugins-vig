@@ -1,11 +1,11 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import { inline, block } from './nodes';
 import splitBlock from './utils/splitBlock';
 
 
 const { vnode } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'atxHeader',
   input: 'block',
   parse: node => {

@@ -1,14 +1,14 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import { inline } from './nodes';
 import splitInline from './utils/splitInline';
 
 
 const { vnode } = nodes;
 
-export default (option = {}) => ({
+export default middleware({
   name: 'hyperlink',
   input: 'inline',
-  parse: node => {
+  parse: (node, option) => {
     const patt = /\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g;
     const { placeholder } = option;
     const group = splitInline(node, patt, matched => {

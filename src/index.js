@@ -17,3 +17,4 @@ export { default as inlineItalics } from './inlineItalics';
 export { default as coseLineCode } from './coseLineCode';
 export { default as highlight } from './highlight';
 export { default as html } from './html';
+export { default as plugins } from './plugins';

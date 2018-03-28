@@ -4,7 +4,7 @@ import { normalize, atxHeader } from '../src';
 
 
 describe('# atcHeader', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(atxHeader())
     .parse

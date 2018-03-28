@@ -1,11 +1,11 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitInline from './utils/splitInline';
 
 
 const { vtext } = nodes;
 
 // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
-export default () => ({
+export default middleware({
   name: 'escaped',
   input: 'inline',
   parse: node => {

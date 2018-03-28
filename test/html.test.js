@@ -5,7 +5,7 @@ import { normalize, paragraph, html } from '../src';
 
 const string = '<span style="color: red">fonts</span>';
 describe('# html', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(paragraph())
     .use(html())

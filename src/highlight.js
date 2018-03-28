@@ -1,13 +1,13 @@
+import { nodes, middleware } from 'md-core';
 import hljs from 'highlight.js';
-import { nodes } from 'md-core';
 
 
 const { vtext, vnode, html } = nodes;
 
-export default (option = {}) =>({
+export default middleware({
   name: 'highlight',
   input: 'plain code',
-  parse: node => {
+  parse: (node, option) => {
     const { text, lang } = node;
     const { lineNumber = false } = option;
 

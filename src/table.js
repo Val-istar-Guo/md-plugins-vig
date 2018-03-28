@@ -1,4 +1,4 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitBlock from './utils/splitBlock';
 import { inline } from './nodes';
 
@@ -79,7 +79,7 @@ const parseTHead = (aligns, maxL, line) => {
 };
 
 
-export default () => ({
+export default middleware({
   name: 'table',
   input: 'block',
   parse: node => {

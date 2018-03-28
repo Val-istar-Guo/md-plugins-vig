@@ -1,11 +1,11 @@
-import { nodes } from 'md-core';
+import { nodes, middleware } from 'md-core';
 import splitBlock from './utils/splitBlock';
 import { inline } from './nodes';
 
 
 const { vnode } = nodes;
 
-export default () => ({
+export default middleware({
   name: 'setext header',
   input: 'block',
   parse: node => {

@@ -30,7 +30,7 @@ const t4 = `
 const result = '<table><thead><tr><th class="left" style="text-align: left">col one</th><th class="center" style="text-align: center">col two</th><th class="right" style="text-align: right">col three</th></tr></thead><tbody><tr><td class="left" style="text-align: left">line 1</td><td class="center" style="text-align: center">line 2</td><td class="right" style="text-align: right">line 3</td></tr></tbody></table>'
 
 describe('# table', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(table())
     .parse

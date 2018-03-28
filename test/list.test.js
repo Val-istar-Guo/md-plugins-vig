@@ -4,7 +4,7 @@ import { normalize, list } from '../src';
 
 
 describe('#list', function () {
-  const parse = md({ debug: false })
+  const parse = md()
     .use(normalize())
     .use(list())
     .parse
