@@ -8,7 +8,7 @@ export default {
     file: 'dist/bundle.js',
     format: 'cjs',
   },
-  external: ['md-core'],
+  external: ['md-core', 'highlight.js'],
 
   plugins: [
     resolve(),
