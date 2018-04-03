@@ -22,13 +22,13 @@ import { default as html } from './html';
 
 export default compose([
   normalize,
+  list,
   coseLineCode,
   code,
   highlight,
   atxHeader,
   setextHeader,
   hr,
-  list,
   blockquote,
   table,
   paragraph,
