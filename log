@@ -1,0 +1,61 @@
+
+> md-plugins-vig@1.0.1 test /Users/quessir/Code/md-plugins-vig
+> mocha --compilers js:babel-core/register "test/list.test.js"
+
+
+
+  #list
+    ✓ child list
+    ul
+[ { content: 'list 1\n', length: 9 } ]
+[ { content: 'list 2\n', length: 9 },
+  { content: 'list 3', length: 8 } ]
+group:  [ VNode {
+    name: 'ul',
+    tagName: 'ul',
+    properties: {},
+    children: [ [VNode] ],
+    count: 1,
+    characters: 0,
+    source: '',
+    option: {},
+    context: {} },
+  Block {
+    name: 'block',
+    text: '\nlist 11\n',
+    length: 9,
+    option: {},
+    context: {} },
+  VNode {
+    name: 'ul',
+    tagName: 'ul',
+    properties: {},
+    children: [ [VNode], [VNode] ],
+    count: 2,
+    characters: 0,
+    source: '',
+    option: {},
+    context: {} } ]
+group:  []
+      1) simple
+      ✓ block in list
+    ol
+      - simple
+
+
+  2 passing (65ms)
+  1 pending
+  1 failing
+
+  1) #list
+       ul
+         simple:
+     Error: block expect someone middleware to parse:
+      at Block.toHTML (src/nodes/block.js:11:11)
+      at /Users/quessir/Code/md-core/dist/index.js:239:22
+      at Array.map (<anonymous>)
+      at Fragment.toHTML (/Users/quessir/Code/md-core/dist/index.js:238:28)
+      at Context.<anonymous> (test/list.test.js:17:28)
+
+
+
