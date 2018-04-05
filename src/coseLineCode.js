@@ -9,13 +9,12 @@ export default middleware({
   name: 'code',
   input: 'block',
   parse: node => {
-    const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
+    // const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
+    const patt = /^(`{3,})(.*)\n([\S\s]*?)(?:\n\1)/mg;
     const group = splitBlock(node, patt, matched => {
       const [, , lang, text] = matched
-      const text$ = plainCode(text, lang);
-      const code$ = vnode('code', { class: lang }, [text$])
-      const pre$ = vnode('pre', [code$])
-      return pre$
+      const code$ = plainCode(text, lang);
+      return code$
     });
 
     if (group.length) return group

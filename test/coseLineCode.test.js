@@ -48,7 +48,7 @@ describe('# cose line code', function () {
 
   it('cose line code', function () {
     expect(parse('```\n/** i am code */\n```').toHTML())
-      .to.equal('<pre><code>/** i am code */\n</code></pre>');
+      .to.equal('<pre><code>/** i am code */</code></pre>');
   });
 
   // it('cose line code', function () {
