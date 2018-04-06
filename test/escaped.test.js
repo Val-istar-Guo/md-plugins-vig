@@ -10,8 +10,8 @@ describe('# escaped', function () {
     .use(escaped())
     .parse
 
-  it('should esacape: \ ` * _ { } [ ] ( ) # * + - . !', function () {
-    expect(parse('\\\\\\`\\*\\_\\{\\}\\[\\]\\(\\)\\#\\*\\+\\-\\.\\!').toHTML())
-      .to.equal('<p>\\`*_{}[]()#*+-.!</p>')
+  it('should esacape: \\ ` * _ { } [ ] ( ) # * + - . ! < >', function () {
+    expect(parse('\\\\\\`\\*\\_\\{\\}\\[\\]\\(\\)\\#\\*\\+\\-\\.\\!\<\>').toHTML())
+      .to.equal('<p>\\`*_{}[]()#*+-.!<></p>')
   })
 })

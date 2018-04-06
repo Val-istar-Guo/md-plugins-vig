@@ -4,12 +4,12 @@ import splitInline from './utils/splitInline';
 
 const { vtext } = nodes;
 
-// Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
+// Only esacape: \ ` * _ { } [ ] ( ) # * + - . ! < >
 export default middleware({
   name: 'escaped',
   input: 'inline',
   parse: node => {
-    const patt = /\\([\\`\*_{}\[\]()#\+.!\-])/g;
+    const patt = /\\([\\`\*_{}\[\]()#\+.!\-<>])/g;
     const group = splitInline(node, patt, matched =>
       vtext(matched[1]).nameAs('escaped')
     );
