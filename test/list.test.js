@@ -3,6 +3,7 @@ import md from 'md-core';
 import { normalize, list } from '../src';
 
 
+const l = '1. 可配置\n2. 配置格式和数据格式高度一致\n3. 支持过滤非法数据\n4. 填充默认值，自动进行类型转换'
 
 describe('#list', function () {
   const parse = md()
@@ -10,7 +11,7 @@ describe('#list', function () {
     .use(list())
     .parse
 
-  describe('ul', function () {
+  describe.skip('ul', function () {
     const simple = '* list 1\n* list 2\n* list 3';
 
     it('simple', function () {
@@ -23,11 +24,11 @@ describe('#list', function () {
     })
   })
 
-  describe.skip('ol', function () {
+  describe('ol', function () {
     const simple = '1. list 1\n2. list 2\n3. list 3';
 
     it('simple', function () {
-      expect(parse(simple).toHTML())
+      expect(parse(l).toHTML())
         .to.equal('<ol><li>list 1</li><li>list 2</li><li>list 3</li></ol>');
     })
   })

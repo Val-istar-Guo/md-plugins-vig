@@ -38,11 +38,11 @@ const inlinePara = (str) => {
 
 const content = (str, prefix) => {
   const stack = []
-  const patt = /^ {0,3}([*+-]|(\d+.)) +/
+  // const patt = /^ {0,3}([*+-]|(\d+.)) +/
+  const patt = new RegExp(`^ {0,${prefix.length - 1}}([*+-]|(\\d+\\.)) `)
 
   while (true) {
     if (patt.exec(str)) break;
-
     const iResult = inlinePara(str, prefix)
 
     if (iResult.pass) {
@@ -67,7 +67,6 @@ const content = (str, prefix) => {
 }
 
 const matchList = (str, patt) => {
-  // const patt = /^( {0,3})([*+-])( +)/
   const stack = []
 
   while (true) {
@@ -79,7 +78,7 @@ const matchList = (str, patt) => {
 
     const value = content(str, prefix)
     stack.push({
-      content: value.replace(new RegExp(`^${prefix}`, 'mg'), ''),
+      content: `${prefix}${value}`.replace(new RegExp(`^${prefix}`, 'mg'), ''),
       length: all.length + value.length,
     })
     str = str.substr(value.length)
@@ -93,7 +92,6 @@ const matchList = (str, patt) => {
     last.length = last.length - emptyLines.length
   }
 
-  console.log(stack)
   return stack
     .map(item => ({
       ...item,
@@ -104,17 +102,13 @@ const matchList = (str, patt) => {
       length: item.length,
       node: vnode('li', [item.content])
     }))
-    // .map(item => {
-    //   console.log(item.node.children)
-    //   return item
-    // })
 }
 
 const findList = str => {
   const stack = []
 
   while (true) {
-    const matched = /^( {0,3})([*+-]|(\d+.)) /mg.exec(str)
+    const matched = /^( {0,3})([*+-]|(\d+\.)) /mg.exec(str)
     if (!matched) break;
 
     if (matched.index !== 0) {
@@ -124,10 +118,10 @@ const findList = str => {
 
     let list = null;
     if (matched[3]) {
-      list = matchList(str, /^( {0,3})(\d+.)( +)/)
+      list = matchList(str, /^( {0,3})(\d+\.)( )/)
       stack.push(vnode('ol', list.map(item => item.node)))
     } else {
-      list = matchList(str, /^( {0,3})([*+-])( +)/)
+      list = matchList(str, /^( {0,3})([*+-])( )/)
       stack.push(vnode('ul', list.map(item => item.node)))
     }
 
@@ -146,7 +140,6 @@ export default middleware({
   input: 'block',
   parse: node => {
     const group = findList(node.text)
-    console.log('group: ', group)
 
     if (group.length) return group;
     return node;
