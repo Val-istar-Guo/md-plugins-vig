@@ -23,8 +23,10 @@ import { default as br } from './br'
 
 export default compose([
   normalize,
-  list,
+  // NOTE: cose line code should before list
   coseLineCode,
+  list,
+  // NOTE: normal code should after list
   code,
   highlight,
   atxHeader,

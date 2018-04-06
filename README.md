@@ -70,8 +70,8 @@ import {
 
 export default md()
   .use(normalize())
-  .use(list())
   .use(coseLineCode())
+  .use(list())
   .use(code())
   /**
    * if you don't want to use highlight remove this plugin
