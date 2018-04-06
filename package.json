@@ -1,6 +1,6 @@
 {
   "name": "md-plugins-vig",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "markdown parse",
   "main": "dist/bundle.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "peerDependencies": {
-    "md-core": "~1.0",
+    "md-core": ">= 1.0.3 < 2",
     "highlight.js": "~9.0"
   }
 }
