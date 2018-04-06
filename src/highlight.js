@@ -27,8 +27,6 @@ export default middleware({
     if (lang && hljs.getLanguage(lang)) {
       code = hljs.highlight(lang, code)
     } else {
-      // const htmlText = hljs.highlightAuto(text)
-      console.log(hljs.highlightAuto(code))
       code = hljs.highlightAuto(code)
     }
 

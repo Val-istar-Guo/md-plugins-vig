@@ -12,6 +12,6 @@ describe('# escaped', function () {
 
   it('should esacape: \\ ` * _ { } [ ] ( ) # * + - . ! < >', function () {
     expect(parse('\\\\\\`\\*\\_\\{\\}\\[\\]\\(\\)\\#\\*\\+\\-\\.\\!\<\>').toHTML())
-      .to.equal('<p>\\`*_{}[]()#*+-.!<></p>')
+      .to.equal('<p>\\`*_{}[]()#*+-.!&lt;&gt;</p>')
   })
 })

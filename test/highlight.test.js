@@ -23,11 +23,11 @@ const notLangCode = `
     asdfiuehirowefunidfmvwenio
 `
 
-const result = '<pre><code class="javascript"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">\'md-core\'</span>;</code></pre>'
-const autoIdentify = '<pre><code class="clean"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">\'md-core\'</span>;</code></pre>'
+const result = '<pre><code class="javascript"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">&#39;md-core&#39;</span>;</code></pre>'
+const autoIdentify = '<pre><code class="clean"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">&#39;md-core&#39;</span>;</code></pre>'
 
 
-describe('# html', function () {
+describe('# highlight', function () {
   const parse = md()
     .use(normalize())
     .use(code())

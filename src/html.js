@@ -14,7 +14,7 @@ export default middleware({
     const nodes = html(text);
 
     if (nodes.some(isChild)) {
-      nodes.map(child => {
+      return nodes.map(child => {
         if (typeof child === 'string') return inline(child)
         return child
       })
