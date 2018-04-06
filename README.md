@@ -70,6 +70,7 @@ import {
 
 export default md()
   .use(normalize())
+  .use(list())
   .use(coseLineCode())
   .use(code())
   /**
@@ -80,7 +81,6 @@ export default md()
   .use(atxHeader())
   .use(setextHeader())
   .use(hr())
-  .use(list())
   .use(blockquote())
   .use(table())
   .use(paragraph())
