@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import md from 'md-core';
-import { normalize, paragraph, inlineBold } from '../src';
+import { normalize, paragraph, inlineBold, splitChar } from '../src';
 
 
 describe('# inline bold', function () {
@@ -8,15 +8,21 @@ describe('# inline bold', function () {
     .use(normalize())
     .use(paragraph())
     .use(inlineBold())
+    .use(splitChar())
     .parse
 
-  it('can parse xxxxx**bold text**', function () {
-    expect(parse('xxxxx**bold text**').toHTML())
-      .to.equal('<p>xxxxx<strong class="asterisk">bold text</strong></p>')
+  it.skip('can parse x**bold text**', function () {
+    expect(parse('x**bold text**').toHTML())
+      .to.equal('<p>x<strong class="asterisk">bold text</strong></p>')
   });
 
-  it('can parse __bold text__', function () {
-    expect(parse('__bold text__').toHTML())
-      .to.equal('<p><strong class="underline">bold text</strong></p>')
+  it('parse x**bold \\* text** should include *', function () {
+    expect(parse('x**bold \\* text**').toHTML())
+      .to.equal('<p>x<strong class="asterisk">bold \\* text</strong></p>')
+  });
+
+  it.only('can parse __bold text__', function () {
+    expect(parse('__bold text__endstring').toHTML())
+      .to.equal('<p><strong class="underline">bold text</strong>endstring</p>')
   });
 })

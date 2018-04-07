@@ -1,5 +1,4 @@
 import { nodes, middleware } from 'md-core';
-import splitInline from './utils/splitInline';
 import { inline } from './nodes';
 
 
@@ -11,13 +10,9 @@ export default middleware({
   parse: node => {
     const text = node.text;
 
-    const nodes = html(text);
-
-    if (nodes.some(isChild)) {
-      return nodes.map(child => {
-        if (typeof child === 'string') return inline(child)
-        return child
-      })
+    const nodes = html(text, true, true);
+    if (isChild(nodes[0])) {
+      return [ nodes[0], inline(nodes[1]) ]
     }
 
     return node;

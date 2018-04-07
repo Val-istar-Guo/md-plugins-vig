@@ -30,7 +30,7 @@ export default middleware({
       code = hljs.highlightAuto(code)
     }
 
-    const code$ = vnode('code', { class: code.language }, html(code.value, false, false))
+    const code$ = vnode('code', { class: code.language }, html(code.value))
     const pre$ = vnode('pre', [code$])
 
     return pre$

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import md from 'md-core';
-import { normalize, paragraph, inlineCode } from '../src';
+import { normalize, paragraph, inlineCode, splitChar } from '../src';
 
 
 describe('# inline code', function () {
@@ -8,6 +8,7 @@ describe('# inline code', function () {
     .use(normalize())
     .use(paragraph())
     .use(inlineCode())
+    .use(splitChar())
     .parse
 
   it('can parse xxxxx`code text`', function () {

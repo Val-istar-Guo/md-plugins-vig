@@ -1,5 +1,5 @@
 import { nodes, middleware } from 'md-core';
-import splitInline from './utils/splitInline';
+import { inline } from './nodes'
 
 
 const { vnode, vtext } = nodes;
@@ -8,13 +8,19 @@ export default middleware({
   name: 'inlineCode',
   input: 'inline',
   parse: node => {
-    const patt = /(`+)(.*?)\1/g;
-    const group = splitInline(node, patt, matched => {
-      const codeText = vtext(matched[2]).nameAs('inline code')
-      return vnode('code', [codeText]);
-    })
+    const patt = /^(`+)(.*?)\1/g;
 
-    if (group.length) return group;
-    return node;
+    const matched = patt.exec(node.text)
+    if (!matched) return node
+
+    const codeText = vtext(matched[2]).nameAs('inline code')
+
+    const result = [vnode('code', [codeText])]
+
+    if (node.text.length > patt.lastIndex) {
+      result.push(inline(node.text.substr(patt.lastIndex)))
+    }
+
+    return result
   },
 });

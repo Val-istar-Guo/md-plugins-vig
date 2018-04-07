@@ -1,5 +1,5 @@
 import { nodes, middleware } from 'md-core';
-import splitInline from './utils/splitInline';
+import { inline } from './nodes'
 
 
 const { vtext } = nodes;
@@ -9,12 +9,16 @@ export default middleware({
   name: 'escaped',
   input: 'inline',
   parse: node => {
-    const patt = /\\([\\`\*_{}\[\]()#\+.!\-<>])/g;
-    const group = splitInline(node, patt, matched =>
-      vtext(matched[1]).nameAs('escaped')
-    );
+    const patt = /^\\([\\`\*_{}\[\]()#\+.!\-<>])/g
+    const matched = patt.exec(node.text)
 
-    if (group.length) return group;
-    return node;
+    if (!matched) return node;
+
+    const result = [vtext(matched[1]).nameAs('escaped')]
+    if (node.text.length > patt.lastIndex) {
+      result.push(inline(node.text.substr(patt.lastIndex)))
+    }
+
+    return result
   },
 });

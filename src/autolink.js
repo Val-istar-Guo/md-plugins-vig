@@ -9,37 +9,27 @@ export default middleware({
   input: 'inline',
   parse: node => {
     const str = node.text;
-    const patt = /<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/g;
-    const group = [];
+    const patt = /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/g;
 
-    while(true) {
-      const lastIndex = patt.lastIndex;
-      const next = patt.exec(str);
+    const matched = patt.exec(node.text)
+    if (!matched) return node
 
-      if (!next) {
-        if (lastIndex && lastIndex < str.length) {
-          group.push(inline(str.substr(lastIndex)));
-        }
-        break;
-      }
-
-      if (next.index !== lastIndex) {
-        group.push(inline(str.substring(lastIndex, next.index)));
-      }
-
-      let a$;
-      const [, uri, protocol, email] = next;
-      if (email) {
-        a$ = vnode('a', { href: `mailto:${email}` }, [email]);
-      } else if (protocol === "mailto") {
-        a$ = vnode('a', { href: encodeURI(uri) }, [uri.substr("mailto:".length)]);
-      } else {
-        a$ = vnode('a', { href: uri, }, [uri]);
-      }
-      group.push(a$);
+    let a$;
+    const [, uri, protocol, email] = matched;
+    if (email) {
+      a$ = vnode('a', { href: `mailto:${email}` }, [email]);
+    } else if (protocol === "mailto") {
+      a$ = vnode('a', { href: encodeURI(uri) }, [uri.substr("mailto:".length)]);
+    } else {
+      a$ = vnode('a', { href: uri, }, [uri]);
     }
 
-    if (group.length) return group;
-    return node;
+    const result = [a$]
+
+    if (node.text.length > patt.lastIndex) {
+      result.push(inline(node.text.substr(patt.lastIndex)))
+    }
+
+    return result
   },
 });

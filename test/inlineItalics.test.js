@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import md from 'md-core';
-import { normalize, paragraph, inlineItalics } from '../src';
+import { normalize, paragraph, inlineItalics, splitChar } from '../src';
 
 
 describe('# inline italics', function () {
@@ -8,6 +8,7 @@ describe('# inline italics', function () {
     .use(normalize())
     .use(paragraph())
     .use(inlineItalics())
+    .use(splitChar())
     .parse
 
   it('can parse xxxxx*italics text*', function () {

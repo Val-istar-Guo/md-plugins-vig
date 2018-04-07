@@ -65,6 +65,7 @@ import {
   hyperlink, image, autolink, escaped,
   inlineCode, inlineBold, inlineItalics,
   coseLineCode, highlight, html, br,
+  splitChar,
 } from 'md-plugins-vig';
 
 
@@ -84,7 +85,6 @@ export default md()
   .use(blockquote())
   .use(table())
   .use(paragraph())
-  .use(html())
   .use(escaped())
   .use(inlineCode())
   .use(inlineBold())
@@ -92,7 +92,9 @@ export default md()
   .use(hyperlink())
   .use(image())
   .use(autolink())
+  .use(html())
   .use(br())
+  .use(splitChar())
 ```
 
 

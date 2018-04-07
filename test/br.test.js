@@ -1,12 +1,13 @@
 import { expect } from 'chai';
 import md from 'md-core';
-import { normalize, paragraph, br } from '../src';
+import { normalize, paragraph, br, splitChar } from '../src';
 
 describe('# hr', function () {
   const parse = md()
     .use(normalize())
     .use(paragraph())
     .use(br())
+    .use(splitChar())
     .parse
 
   it('hr', function () {

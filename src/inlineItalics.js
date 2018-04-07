@@ -1,5 +1,5 @@
 import { nodes, middleware } from 'md-core';
-import splitInline from './utils/splitInline';
+import { inline } from './nodes'
 
 
 const { vnode } = nodes;
@@ -13,13 +13,33 @@ export default middleware({
   name: 'inlineCode',
   input: 'inline',
   parse: node => {
-    const patt = /([\*_])(.*?)\1/g
-    const group = splitInline(node, patt, matched => {
-      const [, mark, em] = matched
-      return vnode('em', { class: className[mark] }, [em]);
-    })
+    const startPatt = /^([\*_])(?=[^*])/g
+    const createEndPatt = style => style === '*' ? /(.)\*/g : /(.)_/g;
 
-    if (group.length) return group
+    const startMatched = startPatt.exec(node.text)
+    if (!startMatched) return node;
+    const [, style] = startMatched
+    const endPatt = createEndPatt(style)
+
+    const str = node.text.substr(1)
+    while (true) {
+      const matched = endPatt.exec(str)
+
+      if (!matched) break;
+
+      if (matched[1] !== '\\') {
+        const result = [
+          vnode('em', { class: className[style] }, [inline(str.substr(0, matched.index + 1))]),
+        ]
+
+        if (endPatt.lastIndex < str.length) {
+          result.push(inline(str.substr(endPatt.lastIndex)))
+        }
+
+        return result
+      }
+    }
+
     return node
   },
 })

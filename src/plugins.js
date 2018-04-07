@@ -19,6 +19,7 @@ import { default as coseLineCode } from './coseLineCode'
 import { default as highlight } from './highlight'
 import { default as html } from './html'
 import { default as br } from './br'
+import { default as splitChar } from './splitChar'
 
 
 export default compose([
@@ -35,11 +36,6 @@ export default compose([
   blockquote,
   table,
   paragraph,
-  /**
-   * NOTE: html should before escaped avoid '\<' to be escaping,
-   *       exp. <font>xx\<span>ss</span></font>, '\' should be keep
-   */
-  html,
   escaped,
   inlineCode,
   inlineBold,
@@ -47,5 +43,7 @@ export default compose([
   hyperlink,
   image,
   autolink,
+  html,
   br,
+  splitChar,
 ])
