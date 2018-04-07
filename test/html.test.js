@@ -15,4 +15,14 @@ describe('# html', function () {
     expect(parse(string).toHTML())
       .to.equal(`<p>${string}</p>`)
   })
+
+  it('should not decode html string', function () {
+    expect(parse('<font>&amp;</font>').toHTML())
+      .to.equal('<p><font>&amp;</font></p>')
+  })
+
+  it('should support /< in html tag', function () {
+    expect(parse('<font>str\\<span>ss</span></font>').toHTML())
+      .to.equal('<p><font>str\\<span>ss</span></font></p>')
+  })
 })

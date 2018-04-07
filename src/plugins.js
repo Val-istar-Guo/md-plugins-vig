@@ -35,6 +35,11 @@ export default compose([
   blockquote,
   table,
   paragraph,
+  /**
+   * NOTE: html should before escaped avoid '\<' to be escaping,
+   *       exp. <font>xx\<span>ss</span></font>, '\' should be keep
+   */
+  html,
   escaped,
   inlineCode,
   inlineBold,
@@ -42,6 +47,5 @@ export default compose([
   hyperlink,
   image,
   autolink,
-  html,
   br,
 ])
