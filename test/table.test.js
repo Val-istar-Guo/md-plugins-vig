@@ -27,12 +27,18 @@ const t4 = `
  line 1  | line 2  | line 3    |
 `;
 
+const t5 = `
+ col one | col two | col three |
+:--------|:-------:|----------:|
+ line 1  | line 2
+`;
+
 const result = '<table><thead><tr><th class="left" style="text-align: left">col one</th><th class="center" style="text-align: center">col two</th><th class="right" style="text-align: right">col three</th></tr></thead><tbody><tr><td class="left" style="text-align: left">line 1</td><td class="center" style="text-align: center">line 2</td><td class="right" style="text-align: right">line 3</td></tr></tbody></table>'
 
 describe('# table', function () {
   const parse = md()
     .use(normalize())
-    .use(table())
+    .use(table({ autoFill: 'line 3' }))
     .parse
 
   it('intict table', function () {
@@ -52,6 +58,11 @@ describe('# table', function () {
 
   it ('no left tab', function () {
     expect(parse(t4).toHTML())
+      .to.equal(result)
+  })
+
+  it ('auto fill empty tr', function () {
+    expect(parse(t5).toHTML())
       .to.equal(result)
   })
 })

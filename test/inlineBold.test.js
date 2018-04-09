@@ -11,7 +11,7 @@ describe('# inline bold', function () {
     .use(splitChar())
     .parse
 
-  it.skip('can parse x**bold text**', function () {
+  it('can parse x**bold text**', function () {
     expect(parse('x**bold text**').toHTML())
       .to.equal('<p>x<strong class="asterisk">bold text</strong></p>')
   });
@@ -21,7 +21,7 @@ describe('# inline bold', function () {
       .to.equal('<p>x<strong class="asterisk">bold \\* text</strong></p>')
   });
 
-  it.only('can parse __bold text__', function () {
+  it('can parse __bold text__', function () {
     expect(parse('__bold text__endstring').toHTML())
       .to.equal('<p><strong class="underline">bold text</strong>endstring</p>')
   });
