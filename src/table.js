@@ -44,15 +44,17 @@ const parseAlign = (maxL,aligns) => {
 const fillTr = (maxL,line, autoFill) => {
   const len = line.length;
   if (maxL > len) {
-    const empty = new Array(maxL - len);
+    const empty = new Array(maxL - len)
     empty.fill(autoFill);
+    console.log('empty: ', empty)
     line.push(...empty);
   }
 
+  console.log(line, maxL)
   return line;
 }
 
-const parseTr = (aligns, maxL, childTag = 'td', autoFill) => tr => {
+const parseTr = (aligns, maxL, childTag = 'td', autoFill = '') => tr => {
   const children$ = fillTr(maxL, tr, autoFill)
     .map((child, i) => {
       const inline$ = inline(child);
