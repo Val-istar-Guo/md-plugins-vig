@@ -27,18 +27,18 @@ const alignStyleEnum = {
 };
 
 const parseAlign = (maxL,aligns) => {
-  const arr = new Array(maxL);
-  arr.fill(LEFT);
+  const arr = new Array(maxL)
+  arr.fill(LEFT)
 
   aligns.reduce((arr, align, i) => {
-    if (/^:.*:$/.test(align)) arr[i] = CENTER;
-    else if (align.charAt(0) === ':') arr[i] = LEFT;
-    else arr[i] = RIGHT;
+    if (/^:.*:$/.test(align)) arr[i] = CENTER
+    else if (align.charAt(align.length) === ':') arr[i] = RIGHT
+    else arr[i] = LEFT
 
-    return arr;
-  }, arr);
+    return arr
+  }, arr)
 
-  return arr;
+  return arr
 }
 
 const fillTr = (maxL,line, autoFill) => {
