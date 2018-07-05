@@ -1,6 +1,6 @@
 {
   "name": "md-plugins-vig",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "markdown parse",
   "main": "dist/bundle.js",
   "scripts": {
