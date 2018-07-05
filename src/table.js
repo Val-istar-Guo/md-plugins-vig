@@ -46,11 +46,9 @@ const fillTr = (maxL,line, autoFill) => {
   if (maxL > len) {
     const empty = new Array(maxL - len)
     empty.fill(autoFill);
-    console.log('empty: ', empty)
     line.push(...empty);
   }
 
-  console.log(line, maxL)
   return line;
 }
 
