@@ -1,23 +1,22 @@
 import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs'
+import config from './build.config'
 
-export default {
+export default [{
   input: 'src/index.js',
   output: {
-    file: 'dist/bundle.js',
+    file: 'dist/index.js',
     format: 'cjs',
   },
-  external: ['md-core', 'highlight.js'],
+  ...config,
 
   plugins: [
     resolve(),
     babel({
       babelrc: false,
       presets: [
-        ["env", {
-          modules: false
-        }],
+        ["env", { modules: false }],
       ],
       plugins: ["transform-object-rest-spread", "external-helpers"],
       // runtimeHelpers: true,
@@ -27,4 +26,4 @@ export default {
       include: 'node_modules/**',
     }),
   ],
-};
+}]

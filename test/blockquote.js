@@ -1,20 +1,20 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, paragraph } from '../src'
+import { normalize, blockquote, paragraph } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
     .use(normalize())
+    .use(blockquote())
     .use(paragraph())
-    .parse;
+    .parse
 })
 
 test(
-  'parse paragraph syntax',
+  'parse blockquote syntax',
   parse,
-  'i am paragraph',
-  '<p>i am paragraph</p>'
+  '> aaaa',
+  '<blockquote><p>aaaa</p></blockquote>'
 )
-

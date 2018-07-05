@@ -1,20 +1,19 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, paragraph } from '../src'
+import { normalize, code } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
     .use(normalize())
-    .use(paragraph())
-    .parse;
+    .use(code())
+    .parse
 })
 
 test(
-  'parse paragraph syntax',
+  'parse code syntax',
   parse,
-  'i am paragraph',
-  '<p>i am paragraph</p>'
+  '    /** i am code */',
+  '<pre><code>/** i am code */</code></pre>'
 )
-
