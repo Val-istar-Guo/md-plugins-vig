@@ -2,6 +2,7 @@
 
 [![version](https://img.shields.io/npm/v/md-plugins-vig.svg?style=flat-square)](https://www.npmjs.com/package/md-plugins-vig)
 [![downloads](https://img.shields.io/npm/dm/md-plugins-vig.svg?style=flat-square)](https://www.npmjs.com/package/md-plugins-vig)
+[![dependencies](https://img.shields.io/david/Val-istar-Guo/md-plugins-vig.svg?style=flat-square)](https://www.npmjs.com/package/md-plugins-vig)
 
 
 # Install
