@@ -1,13 +1,11 @@
 import test from 'ava'
 import md from 'md-core';
 import { parse } from './macros'
-import { normalize, paragraph, hyperlink } from '../src'
+import { hyperlink } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
-    .use(normalize())
-    .use(paragraph())
     .use(hyperlink({ placeholder: '#' }))
     .parse
 })

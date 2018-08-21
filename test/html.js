@@ -1,20 +1,17 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, paragraph, html, splitChar } from '../src'
+import { html } from '../src'
 
 
 
 test.before(t => {
   t.context.parse = md()
-    .use(normalize())
-    .use(paragraph())
     .use(html())
-    .use(splitChar())
     .parse
 })
 
-test(
+test.only(
   'parse html',
   parse,
   'string<span style="color: red">fonts</span>',

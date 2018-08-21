@@ -1,147 +1,284 @@
-import { nodes, middleware } from 'md-core';
-import { inline, block } from './nodes';
-import splitBlock from './utils/splitBlock';
+import { combine, middleware } from 'md-core/utils'
+import { version } from '../package.json';
+import { inline, block } from './nodes'
+import normilize from './normilize'
+import paragraph from './paragraph'
 
 
-const { vnode } = nodes;
+const prefix = (lines, string) => ({
+  content: string + lines.content,
+  nextItem: lines.nextItem,
+  length: lines.length + string.length,
+})
 
-const clearEnter = content => {
-  const matched = /\n(\s*\n)*$/g.exec(content);
-  if (!matched) return undefined;
-
-  return matched[1]
-}
-
-const paragraph = str => {
-  const patt = /(^.*\S.*$)+/m
-}
-
-const blockPara = (str, prefix) => {
-  const patt = new RegExp(`^(\\s*\\n)+(${prefix}.*\\S.*(\\n|$))?`)
-
-  const matched = patt.exec(str)
-  if (!matched) return { pass: false }
-
-  if (matched[2]) return { pass: true, value: matched[0] }
-
-  return { pass: true, value: matched[0], end: true }
-}
-
-const inlinePara = (str) => {
-  const patt = /^.*\S.*(\n|$)/
-
-  const matched = patt.exec(str)
-  if (!matched) return { pass: false }
-
-  return { pass: true, value: matched[0] }
-}
-
-const content = (str, prefix) => {
-  const stack = []
-  // const patt = /^ {0,3}([*+-]|(\d+.)) +/
-  const patt = new RegExp(`^ {0,${prefix.length - 1}}([*+-]|(\\d+\\.)) `)
-
-  while (true) {
-    if (patt.exec(str)) break;
-    const iResult = inlinePara(str, prefix)
-
-    if (iResult.pass) {
-      stack.push(iResult.value)
-      str = str.substr(iResult.value.length)
-      continue
+const matchSpace = (lexical) => {
+  const buffer = []
+  while(!lexical.end) {
+    const char = lexical.next()
+    if (char === ' ') buffer.push(char)
+    else {
+      lexical.backtrace()
+      break
     }
-
-    const bResult = blockPara(str, prefix)
-
-    if (bResult.pass) {
-      stack.push(bResult.value)
-      str = str.substr(bResult.value.length)
-
-      if (!bResult.end) continue
-    }
-
-    break;
   }
 
-  return stack.join('');
+  if (!buffer.length) return ''
+
+  console.log('match space length: ', buffer.length)
+  return buffer.join('')
 }
 
-const matchList = (str, patt) => {
-  const stack = []
+const matchIndentLine = (lexical, indent) => {
+  console.log('match indent line => ', indent)
+  const buffer = []
 
-  while (true) {
-    const matched = patt.exec(str)
-    if (!matched) break;
-    const [all] = matched
-    const prefix = new Array(all.length).fill(' ').join('')
-    str = str.substr(all.length)
-
-    const value = content(str, prefix)
-    stack.push({
-      content: `${prefix}${value}`.replace(new RegExp(`^${prefix}`, 'mg'), ''),
-      length: all.length + value.length,
-    })
-    str = str.substr(value.length)
-  }
-
-  const last = stack[stack.length - 1]
-  const emptyLines = clearEnter(last.content)
-
-  if (emptyLines) {
-    last.content = last.content.substr(0, last.content.length - emptyLines.length)
-    last.length = last.length - emptyLines.length
-  }
-
-  return stack
-    .map(item => ({
-      ...item,
-    content: /.*\n.*\n/.test(item.content) ?
-      block(item.content) : inline(item.content.replace(/\n$/, '')),
-    }))
-    .map(item => ({
-      length: item.length,
-      node: vnode('li', [item.content])
-    }))
-}
-
-const findList = str => {
-  const stack = []
-
-  while (true) {
-    const matched = /^( {0,3})([*+-]|(\d+\.)) /mg.exec(str)
-    if (!matched) break;
-
-    if (matched.index !== 0) {
-      stack.push(block(str.substr(0, matched.index)))
-      str = str.substr(matched.index)
+  for (let i = 0; i < indent; i++) {
+    if (lexical.end) {
+      lexical.backtrace(buffer.length)
+      return
     }
 
-    let list = null;
-    if (matched[3]) {
-      list = matchList(str, /^( {0,3})(\d+\.)( )/)
-      stack.push(vnode('ol', list.map(item => item.node)))
+    const char = lexical.next()
+
+    if (char === ' ') buffer.push(char)
+    else {
+      lexical.backtrace(buffer.length + 1)
+      return
+    }
+  }
+
+  const line = matchLine(lexical, indent)
+  while(!lexical.end) {
+    const char = lexical.next()
+  }
+}
+
+const matchLine = (lexical, indent) => {
+  const buffer = []
+  const beforeSpaces = matchSpace(lexical)
+  if (lexical.end) {
+    if (beforeSpaces.length) lexical.backtrace(beforeSpaces.length)
+    return null
+  }
+
+  const next = lexical.next()
+  if (next === '\n') {
+    // just empty line
+    lexical.backtrace(beforeSpaces.length + 1)
+    return null
+  }
+
+  buffer.push(next)
+
+  while(!lexical.end) {
+    const char = lexical.next()
+
+    if (char === '\n') {
+      buffer.push(char)
+      break
+    }
+    else buffer.push(char)
+  }
+
+  const content = beforeSpaces + buffer.join('')
+  console.log('match content: ', content)
+
+  const nextItem = matchItems(lexical)
+  console.log('match content items: ', !!nextItem)
+  if (nextItem) return { content, nextItem, length: content.length }
+
+  const emptyline = matchEmptyLine(lexical, indent)
+  console.log('match empty line: ', !!emptyline)
+  if (emptyline) return prefix(emptyline, content)
+
+  const line = matchLine(lexical, indent)
+  console.log('match next line: ', !!line)
+  if (line) return prefix(line, content)
+
+  return { content, length: content.length }
+}
+
+const matchEmptyLine = (lexical, indent) => {
+  const buffer = []
+
+  while(!lexical.end) {
+    const char = lexical.next()
+    if (/\s/.test(char)) buffer.push(char)
+    else if (char === '\n') {
+      buffer.push(char)
+      break
     } else {
-      list = matchList(str, /^( {0,3})([*+-])( )/)
-      stack.push(vnode('ul', list.map(item => item.node)))
+      lexical.backtrace(buffer.length + 1)
+      return null
     }
-
-    const length = list
-      .reduce((sum, item) => sum + item.length, 0)
-    str = str.substr(length)
   }
 
-  if (stack.length && str.length) stack.push(block(str))
+  const content = buffer.join('')
+  if (!content) return null
 
-  return stack;
+  const lines = matchEmptyLine(lexical, indent) || matchIndentLine(lexical, indent)
+  if (lines) return prefix(lines, content)
+
+  console.log('un expect empty line: =')
+  lexical.backtrace(content.length)
+  return null;
+  // // ??? 是否保留
+  // return { content, length: content.length }
 }
 
-export default middleware({
+
+const matchOl = lexical => {
+  console.log('match ol')
+  const beforeSpaces = matchSpace(lexical)
+  console.log('ol before space length', beforeSpaces.length)
+
+  if (beforeSpaces && beforeSpaces.length > 3) {
+    lexical.backtrace(beforeSpaces.length)
+    return
+  }
+
+  const buffer = []
+  while (!lexical.end) {
+    const char = lexical.next()
+    if (/\d/.test(char)) buffer.push(char)
+    else if (char === '.' && buffer.length) {
+      buffer.push(char)
+      break
+    }
+    else {
+      lexical.backtrace(beforeSpaces.length + buffer.length + 1)
+      return
+    }
+  }
+
+  const number = buffer.join('')
+  console.log('ol tag: ', `"${number}"`)
+
+  const afterSpaces = matchSpace(lexical)
+  if (!afterSpaces) {
+    lexical.backtrace(beforeSpaces.length + number.length)
+    return
+  }
+
+  // const indent = number.length + space.length
+
+  const content = beforeSpaces + number + afterSpaces
+
+  return { type: 'ol', content, length: content.length }
+}
+
+const matchUl = lexical => {
+  console.log('match ul')
+  const beforeSpaces = matchSpace(lexical)
+  if (beforeSpaces && beforeSpaces.length > 3) {
+    lexical.backtrace(beforeSpaces.length)
+    return
+  }
+
+  const tag = lexical.next()
+  console.log('ul tag: ', `"${tag}"`, /[*-+]/.test(tag));
+  if (!/[*\-+]/.test(tag)) {
+    console.log('ul backstrace', beforeSpaces.length + 1)
+    lexical.backtrace(beforeSpaces.length + 1)
+    return
+  }
+
+  const afterSpaces = matchSpace(lexical)
+  console.log('ul after space length', afterSpaces.length)
+  if (!afterSpaces) {
+    lexical.backtrace(beforeSpaces.length + tag.length)
+    return ''
+  }
+
+  const content = beforeSpaces + tag + afterSpaces
+
+  return { type: 'ul', content, length: content.length }
+}
+
+const matchItems = (lexical) => {
+  if (lexical.end) return null;
+
+  const tag = matchUl(lexical) || matchOl(lexical)
+  if (!tag) return
+
+  const indent = tag.length
+
+  const lines = matchEmptyLine(lexical, indent) || matchLine(lexical, indent)
+  lines.tag = tag
+
+  if (lines.nextItem) {
+    console.log('item lines => ', lines)
+    return {
+      content: [lines].concat(lines.nextItem.content),
+      length: tag.length + lines.length + lines.nextItem.length,
+    }
+  }
+  return {
+    content: [lines],
+    length: tag.length + lines.length
+  }
+}
+
+
+const matchList = lexical => {
+  const items = matchItems(lexical)
+  if (!items) return
+
+  const listType = items.content[0].tag.type
+
+  return { type: listType, content: items.content, length: items.length }
+}
+
+
+
+const listItemCreator = node => (tag, content) => ({
+  ...node('list-item', content),
+  type: tag.type,
+  parse(h) {
+    const { type, value, children } = this
+
+    if (children.length) return h('li', { class: type }, children.map(child => child.parse(h)))
+    return h('li', { class: type }, [value])
+  }
+})
+
+const listCreator = node => (type, items) => ({
+  ...node('list', items),
+  type,
+  parse(h) {
+    const { type, children } = this
+    return h(type, {}, children.map(child => child.parse(h)))
+  }
+})
+
+const list = middleware({
+  version,
   name: 'list',
   input: 'block',
-  parse: node => {
-    const group = findList(node.text)
+  parse: ({ lexical }, node) => {
+    const list = matchList(lexical)
 
-    if (group.length) return group;
-    return node;
-  },
-});
+    if (!list) return
+    console.log('list => ', list)
+
+    const items$ = list.content
+      .map(item => {
+        if (/^.*\n?$/.test(item.content)) {
+          // sing line
+          return listItemCreator(node)(item.tag, item.content.replace('\n', ''))
+        }
+        else {
+          // multi line
+          return listItemCreator(node)(item.tag, [block(node)(item.content)])
+        }
+      })
+
+    const list$ = listCreator(node)(list.type, items$)
+
+    if (!lexical.end) return [list$, block(node)(lexical.toEnd())]
+    return list$
+  }
+})
+
+// export default combine(normilize, list, paragraph)
+export default combine(normilize, list, paragraph)

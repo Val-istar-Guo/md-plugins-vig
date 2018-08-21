@@ -1,24 +1,20 @@
-import { nodes, middleware } from 'md-core';
-import splitBlock from './utils/splitBlock';
-import { inline } from './nodes';
+import { middleware, combine } from 'md-core/utils'
+import { version } from '../package.json';
+import { header, block } from './nodes'
+import normilize from './normilize'
+import paragraph from './paragraph'
 
 
-const { vnode } = nodes;
+const headerCreator = node => ([, content, tag]) => header(node)(tag === '=' ? 1 : 2, content)
 
-export default middleware({
-  name: 'setext header',
+const setextHeader = middleware({
+  version,
+  name: 'setext-header',
   input: 'block',
-  parse: node => {
+  parse: ({ lexical }, node) => {
     const patt = /(.*)\n([-=])\2\2+(?:\n|$)/g;
-    const group = splitBlock(node, patt, matched => {
-      const tagName = matched[2] === '=' ? 'h1' : 'h2';
-      const inline$ = inline(matched[1]);
-      const header$ = vnode(tagName, [inline$]);
-
-      return header$;
-    })
-
-    if (group.length) return group;
-    return node;
+    return lexical = lexical.match(patt, block(node), headerCreator(node))
   },
-});
+})
+
+export default combine(normilize, setextHeader, paragraph)

@@ -1,12 +1,11 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, table } from '../src'
+import { table } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
-    .use(normalize())
     .use(table({ autoFill: 'line 3' }))
     .parse
 })

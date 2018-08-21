@@ -1,15 +1,12 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, paragraph, br, splitChar } from '../src'
+import { br } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
-    .use(normalize())
-    .use(paragraph())
     .use(br())
-    .use(splitChar())
     .parse
 })
 

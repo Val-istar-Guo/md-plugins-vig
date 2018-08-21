@@ -1,12 +1,11 @@
 import test from 'ava'
 import md from 'md-core'
 import { parse } from './macros'
-import { normalize, hr } from '../src'
+import { hr } from '../src'
 
 
 test.before(t => {
   t.context.parse = md()
-    .use(normalize())
     .use(hr())
     .parse
 })

@@ -1,27 +1,45 @@
-import { nodes, middleware } from 'md-core';
+import { combine, middleware } from 'md-core/utils';
+import { version } from '../package.json';
 import { inline } from './nodes'
+import paragraph from './paragraph'
+import text from './text'
 
 
-const { vnode } = nodes;
+const imageCreator = (node, placeholder) => ([, alt, src, , title]) => ({
+  ...node('img'),
+  src: src || placeholder,
+  alt,
+  title,
+  parse(h) {
+    const { src, alt, title } = this
+    return h('img', { src, alt, title })
+  }
+})
 
-export default middleware({
+const image = middleware({
+  version,
   name: 'image',
   input: 'inline',
-  parse: (node, option) => {
-    const patt = /^!\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g;
+  parse: ({ lexical }, node, option) => {
     const { placeholder } = option;
+    const patt = /^!\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g;
 
-    const matched = patt.exec(node.text)
-    if (!matched) return node
+    return lexical.match(patt, inline(node), imageCreator(node, placeholder))
 
 
-    const [, alt, src, , title] = matched;
-    const result = [vnode('img', { alt, src: src || placeholder, title })]
+    // const matched = patt.exec(node.text)
+    // if (!matched) return node
 
-    if (node.text.length > patt.lastIndex) {
-      result.push(inline(node.text.substr(patt.lastIndex)))
-    }
 
-    return result
+    // const [, alt, src, , title] = matched;
+    // const result = [vnode('img', { alt, src: src || placeholder, title })]
+
+    // if (node.text.length > patt.lastIndex) {
+    //   result.push(inline(node.text.substr(patt.lastIndex)))
+    // }
+
+    // return result
   },
 });
+
+export default combine(paragraph, image, text)

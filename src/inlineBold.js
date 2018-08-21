@@ -1,46 +1,62 @@
-import { nodes, middleware } from 'md-core'
+import { combine, middleware } from 'md-core/utils'
+import { version } from '../package.json';
 import { inline } from './nodes'
+import paragraph from './paragraph'
+import text from './text'
 
 
-const { vnode } = nodes
-
-const className = {
+const typeName = {
   '*': 'asterisk',
   '_': 'underline',
 }
 
+const boldCreator = node => ([, , type, content]) => ({
+  ...node('bold', [inline(node)(content)]),
+  type: typeName[type],
+  parse(h) {
+    const { children, type } = this
+    return h('strong', { class: type }, children.map(child => child.parse(h)))
+  }
+});
 
-export default middleware({
-  name: 'inlineCode',
+
+const inlineBold = middleware({
+  version,
+  name: 'inline-bold',
   input: 'inline',
-  parse: node => {
-    const startPatt = /^([\*_])\1(?=[^*])/g
-    const createEndPatt = style => style === '*' ? /(.)\*\*/g : /(.)__/g;
+  parse: ({ lexical }, node) => {
+    // const startPatt = /^([\*_])\1(?=[^*])/g
+    // const createEndPatt = style => style === '*' ? /(.)\*\*/g : /(.)__/g;
 
-    const startMatched = startPatt.exec(node.text)
-    if (!startMatched) return node;
-    const [, style] = startMatched
-    const endPatt = createEndPatt(style)
+    const patt = /^(([*_])\2)((?:\s|\S)+)(?!\\)\1/g
+    return lexical.match(patt, inline(node), boldCreator(node))
 
-    const str = node.text.substr(2)
-    while (true) {
-      const matched = endPatt.exec(str)
+    // const startMatched = startPatt.exec(node.text)
+    // if (!startMatched) return node;
+    // const [, style] = startMatched
+    // const endPatt = createEndPatt(style)
 
-      if (!matched) break;
+    // const str = node.text.substr(2)
+    // while (true) {
+    //   const matched = endPatt.exec(str)
 
-      if (matched[1] !== '\\') {
-        const result = [
-          vnode('strong', { class: className[style] }, [inline(str.substr(0, matched.index + 1))]),
-        ]
+    //   if (!matched) break;
 
-        if (endPatt.lastIndex < str.length) {
-          result.push(inline(str.substr(endPatt.lastIndex)))
-        }
+    //   if (matched[1] !== '\\') {
+    //     const result = [
+    //       vnode('strong', { class: className[style] }, [inline(str.substr(0, matched.index + 1))]),
+    //     ]
 
-        return result
-      }
-    }
+    //     if (endPatt.lastIndex < str.length) {
+    //       result.push(inline(str.substr(endPatt.lastIndex)))
+    //     }
 
-    return node
+    //     return result
+    //   }
+    // }
+
+    // return node
   },
 });
+
+export default combine(paragraph, inlineBold, text)

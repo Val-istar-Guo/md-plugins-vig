@@ -1,39 +1,23 @@
-import { nodes, middleware } from 'md-core';
-import splitBlock from './utils/splitBlock';
-import { inline } from './nodes';
+import { middleware, combine } from 'md-core/utils'
+import { version } from '../package.json';
+import { block, text } from './nodes'
+import normalize from './normilize'
+import paragraph from './paragraph'
 
-
-const { vnode } = nodes;
 
 const splitTr = str => str
   .replace(/(^\s*\|?\s*)|(\s*\|?\s*$)/g, "")
   .split(/\s*\|\s*/)
 
-// aligns
-const LEFT = 1;
-const CENTER = 2;
-const RIGHT = 3;
-
-const alignClassEnum = {
-  [LEFT]: 'left',
-  [CENTER]: 'center',
-  [RIGHT]: 'right',
-};
-
-const alignStyleEnum = {
-  [LEFT]: 'text-align: left',
-  [CENTER]: 'text-align: center',
-  [RIGHT]: 'text-align: right',
-};
 
 const parseAlign = (maxL,aligns) => {
   const arr = new Array(maxL)
-  arr.fill(LEFT)
+  arr.fill('left')
 
   aligns.reduce((arr, align, i) => {
-    if (/^:.*:$/.test(align)) arr[i] = CENTER
-    else if (align.charAt(align.length) === ':') arr[i] = RIGHT
-    else arr[i] = LEFT
+    if (/^:.*:$/.test(align)) arr[i] = 'center'
+    else if (align.charAt(align.length) === ':') arr[i] = 'right'
+    else arr[i] = 'left'
 
     return arr
   }, arr)
@@ -41,68 +25,79 @@ const parseAlign = (maxL,aligns) => {
   return arr
 }
 
-const fillTr = (maxL,line, autoFill) => {
-  const len = line.length;
+const fillTr = (maxL, autoFill, tr) => {
+  const len = tr.length;
   if (maxL > len) {
     const empty = new Array(maxL - len)
     empty.fill(autoFill);
-    line.push(...empty);
+    tr.push(...empty);
   }
 
-  return line;
+  return tr;
 }
 
-const parseTr = (aligns, maxL, childTag = 'td', autoFill = '') => tr => {
-  const children$ = fillTr(maxL, tr, autoFill)
-    .map((child, i) => {
-      const inline$ = inline(child);
-      return vnode(childTag, {
-        class: alignClassEnum[aligns[i]],
-        style: alignStyleEnum[aligns[i]],
-      }, [inline$]);
-    });
-
-  return vnode('tr', children$);
-}
-
+const parseTd = (align, content) => ({ tagName: 'td', align, content })
 const parseTBody = (aligns, maxL, lines, autoFill) => {
-  const tbody = lines
-    .map(parseTr(aligns, maxL, 'td', autoFill))
-
-  return vnode('tbody', tbody);
+  return lines
+    .map(line => {
+      return fillTr(maxL, autoFill, line)
+        .map((td, i) => parseTd(aligns[i], td))
+    })
 };
 
-const parseTHead = (aligns, maxL, line) => {
-  const tr$ = parseTr(aligns, maxL, 'th')(line);
-
-  return vnode('thead', [tr$]);
+const parseTh = (align, content) => ({ tagName: 'th', align, content })
+const parseTHead = (aligns, maxL, line, autoFill) => {
+  return fillTr(maxL, autoFill, line)
+    .map((th, i) => parseTh(aligns[i], th))
 };
 
 
-export default middleware({
+const tableCreator = node => (thead, tbody) => ({
+  ...node('table'),
+  thead,
+  tbody,
+  parse(h) {
+    const { thead, tbody } = this
+
+    const thead$ = h('thead', {}, [
+      h('tr', {}, thead.map(({ align, content }) =>
+        h('th', { class: align, style: `text-align: ${align}` }, [content])
+      ))
+    ])
+
+    const tbody$ = h('tbody', {}, tbody.map(tr =>
+      h('tr', {}, tr.map(({ align, content }) =>
+        h('td', { class: align, style: `text-align: ${align}` }, [content])
+      ))
+    ))
+
+    return h('table', {}, [thead$, tbody$])
+  }
+})
+
+const table = middleware({
+  version,
   name: 'table',
   input: 'block',
-  parse: (node, option) => {
+  parse: ({ lexical }, node, option = {}) => {
     const patt = /(^|\n)( {0,3}(\|?)(.*?\|)+(.*)?)\n( {0,3}(\|\s*)?((:\s*)?-[-\s]*(:\s*)?\|\s*)*((:\s*)?-[-\s]*(:\s*)?(\|\s*)?))\n( {0,3}(\|?)(.*?\|)+(.*)?(\n|$))*/g;
     const { autoFill = '' } = option;
 
-    const group = splitBlock(node, patt, matched => {
+    return lexical.match(patt, block(node), matched => {
       let lines = matched[0]
         .replace(/(^\n)|(\n$)/g, "")
         .split('\n')
         .map(splitTr);
 
       const maxL = Math.max(...lines.map(line => line.length));
-      const [thead, align, ...tbody] = lines;
-      const aligns = parseAlign(maxL, align);
-      const tbody$ = parseTBody(aligns, maxL, tbody, autoFill);
-      const thead$ = parseTHead(aligns, maxL, thead);
+      const [theadString, alignString, ...tbodyString] = lines;
+      const aligns = parseAlign(maxL, alignString);
+      const tbody = parseTBody(aligns, maxL, tbodyString, autoFill);
+      const thead = parseTHead(aligns, maxL, theadString);
 
-      const table$ = vnode('table', [thead$, tbody$]);
-      return table$;
+      return tableCreator(node)(thead, tbody)
     })
-
-    if (group.length) return group;
-    return node;
   },
 });
+
+export default combine(normalize, table, paragraph);

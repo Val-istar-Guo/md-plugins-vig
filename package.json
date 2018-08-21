@@ -47,8 +47,7 @@
     "rollup-plugin-node-resolve": "^3.3.0"
   },
   "peerDependencies": {
-    "md-core": ">= 1.2.0 < 2",
-    "highlight.js": "~9"
+    "md-core": ">= 2 < 3"
   },
   "engines": {
     "node": ">=8.9.4"

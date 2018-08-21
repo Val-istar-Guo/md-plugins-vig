@@ -1,35 +1,34 @@
-import { nodes, middleware } from 'md-core';
-import { inline } from './nodes';
+import { middleware, combine } from 'md-core/utils';
+import { version } from '../package.json';
+import { inline, hyperlink } from './nodes'
+import text from './text'
+import paragraph from './paragraph'
 
 
-const { vnode } = nodes;
+const emailLink = node => email => ({
+  ...node('email-link', email),
+  email,
+  parse(h) {
+    const { email, value } = this
+    return h('a', { href: `mailto:${email}` }, [value])
+  }
+})
 
-export default middleware({
+const autolinkCreator = node => ([, uri, protocol, email]) => {
+  if (email) return emailLink(node)(email)
+  else if (protocol === 'mailto') return emailLink(node)(uri.substr("mailto:".length))
+  else return hyperlink(node)(uri, uri)
+}
+
+const autolink = middleware({
+  version,
   name: 'autolink',
   input: 'inline',
-  parse: node => {
-    const str = node.text;
+  parse: ({ lexical }, node) => {
     const patt = /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/g;
 
-    const matched = patt.exec(node.text)
-    if (!matched) return node
-
-    let a$;
-    const [, uri, protocol, email] = matched;
-    if (email) {
-      a$ = vnode('a', { href: `mailto:${email}` }, [email]);
-    } else if (protocol === "mailto") {
-      a$ = vnode('a', { href: encodeURI(uri) }, [uri.substr("mailto:".length)]);
-    } else {
-      a$ = vnode('a', { href: uri, }, [uri]);
-    }
-
-    const result = [a$]
-
-    if (node.text.length > patt.lastIndex) {
-      result.push(inline(node.text.substr(patt.lastIndex)))
-    }
-
-    return result
+    return lexical.match(patt, inline(node), autolinkCreator(node))
   },
 });
+
+export default combine(paragraph, autolink, text)
