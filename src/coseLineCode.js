@@ -11,20 +11,8 @@ const coseLineCode = middleware({
   name: 'cose-line-code',
   input: 'block',
   parse: ({ lexical, value }, node) => {
-    // const patt = /^(`{3,})(.*)\n((?:.*\n)*?)\1/mg;
-    console.log('cose inline code pppppppppppppppppp', `"${value}"`)
     const patt = /^(`{3,})(.*)\n([\S\s]*?)(?:\n\1)/g;
-
     return lexical.match(patt, block(node), codeCreator(node))
-
-    // const group = splitBlock(node, patt, matched => {
-    //   const [, , lang, text] = matched
-    //   const code$ = plainCode(text, lang);
-    //   return code$
-    // });
-
-    // if (group.length) return group
-    // return node
   },
 })
 

@@ -25,13 +25,6 @@ const escaped = middleware({
   parse: ({ lexical }, node, option) => {
     const patt = /^\\#/g
     return lexical.match(patt, inline(node), () => text(node)('#'))
-
-    // if (lexical.preview(2) === '\\#') {
-    //   lexical.next(2)
-
-    //   const remain = lexical.toEnd()
-    //   return [text(node)('#'), inline(node)(remain)]
-    // }
   },
 })
 

@@ -11,18 +11,8 @@ const indentCode = middleware({
   name: 'code',
   input: 'block',
   parse: ({ lexical }, node) => {
-    // const patt = /^(?:(?: {0,3}\t| {4}).*(?:\n|$))+/mg
     const patt = /^(?:(?:\s*\n)*(?: {0,3}\t| {4}).*(?:\n|$))+/g
     return lexical.match(patt, block(node), codeCreator(node))
-
-    // const group = splitBlock(node, patt, matched => {
-    //   const [text] = matched
-    //   const code$ = plainCode(text.replace(/^( {0,3}\t| {4})/mg, ''))
-    //   return code$
-    // })
-
-    // if (group.length) return group
-    // return node
   },
 })
 

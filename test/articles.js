@@ -21,20 +21,13 @@ test.before(t => {
     .map(fileName => `${basename(fileName, '.md')}.html`)
     .forEach((fileName, i) => {
       const astTree = parse(files[i])
-      console.log('astTree')
-      console.log(astTree)
 
       fs.writeFile(
         join(__dirname, 'preview', fileName),
         createPrivew(astTree.toHTML({ separator: '\n' })),
-        err => console.log(err),
+        err => err && console.log(err),
       )
     })
-
-  fileNames.map((fileName, i) => {
-    console.log('fileName => ', fileName)
-    console.log(parse(files[i]).toHTML())
-  })
 
   t.context.parse = parse
   t.context.files = files

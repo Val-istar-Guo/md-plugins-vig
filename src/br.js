@@ -18,18 +18,7 @@ const br = middleware({
   input: 'inline',
   parse: ({ lexical }, node) => {
     const patt = /^  \n/g;
-
     return lexical.match(patt, inline(node), breakCeator(node))
-
-    // const matched = patt.exec(node.text)
-    // if (!matched) return node
-
-    // const result = [vnode('br')]
-    // if (node.text.length > patt.lastIndex) {
-    //   result.push(inline(node.text.substr(patt.lastIndex)))
-    // }
-
-    // return result
   },
 });
 

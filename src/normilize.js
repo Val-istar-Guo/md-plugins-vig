@@ -8,7 +8,6 @@ export default middleware({
   name: 'normalize',
   input: 'source',
   parse: ({ lexical }, node) => {
-    // console.log(lexical.toEnd())
     const string = lexical.toEnd()
       .replace(/^\s*\n/, "")
       .replace(/\s*$/, '')

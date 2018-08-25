@@ -1,3 +1,3 @@
 export default {
-  external: ['md-core', 'highlight.js'],
+  external: ['md-core/utils'],
 }

@@ -24,12 +24,11 @@ const matchSpace = (lexical) => {
 
   if (!buffer.length) return ''
 
-  console.log('match space length: ', buffer.length)
   return buffer.join('')
 }
 
 const matchIndentLine = (lexical, indent) => {
-  console.log('match indent line => ', indent)
+  // console.log('match indent line => ', indent)
   const buffer = []
 
   for (let i = 0; i < indent; i++) {
@@ -81,18 +80,18 @@ const matchLine = (lexical, indent) => {
   }
 
   const content = beforeSpaces + buffer.join('')
-  console.log('match content: ', content)
+  // console.log('match content: ', content)
 
   const nextItem = matchItems(lexical)
-  console.log('match content items: ', !!nextItem)
+  // console.log('match content items: ', !!nextItem)
   if (nextItem) return { content, nextItem, length: content.length }
 
   const emptyline = matchEmptyLine(lexical, indent)
-  console.log('match empty line: ', !!emptyline)
+  // console.log('match empty line: ', !!emptyline)
   if (emptyline) return prefix(emptyline, content)
 
   const line = matchLine(lexical, indent)
-  console.log('match next line: ', !!line)
+  // console.log('match next line: ', !!line)
   if (line) return prefix(line, content)
 
   return { content, length: content.length }
@@ -119,18 +118,15 @@ const matchEmptyLine = (lexical, indent) => {
   const lines = matchEmptyLine(lexical, indent) || matchIndentLine(lexical, indent)
   if (lines) return prefix(lines, content)
 
-  console.log('un expect empty line: =')
   lexical.backtrace(content.length)
   return null;
-  // // ??? 是否保留
-  // return { content, length: content.length }
 }
 
 
 const matchOl = lexical => {
-  console.log('match ol')
+  // console.log('match ol')
   const beforeSpaces = matchSpace(lexical)
-  console.log('ol before space length', beforeSpaces.length)
+  // console.log('ol before space length', beforeSpaces.length)
 
   if (beforeSpaces && beforeSpaces.length > 3) {
     lexical.backtrace(beforeSpaces.length)
@@ -152,7 +148,7 @@ const matchOl = lexical => {
   }
 
   const number = buffer.join('')
-  console.log('ol tag: ', `"${number}"`)
+  // console.log('ol tag: ', `"${number}"`)
 
   const afterSpaces = matchSpace(lexical)
   if (!afterSpaces) {
@@ -160,15 +156,13 @@ const matchOl = lexical => {
     return
   }
 
-  // const indent = number.length + space.length
-
   const content = beforeSpaces + number + afterSpaces
 
   return { type: 'ol', content, length: content.length }
 }
 
 const matchUl = lexical => {
-  console.log('match ul')
+  // console.log('match ul')
   const beforeSpaces = matchSpace(lexical)
   if (beforeSpaces && beforeSpaces.length > 3) {
     lexical.backtrace(beforeSpaces.length)
@@ -176,15 +170,15 @@ const matchUl = lexical => {
   }
 
   const tag = lexical.next()
-  console.log('ul tag: ', `"${tag}"`, /[*-+]/.test(tag));
+  // console.log('ul tag: ', `"${tag}"`, /[*-+]/.test(tag));
   if (!/[*\-+]/.test(tag)) {
-    console.log('ul backstrace', beforeSpaces.length + 1)
+    // console.log('ul backstrace', beforeSpaces.length + 1)
     lexical.backtrace(beforeSpaces.length + 1)
     return
   }
 
   const afterSpaces = matchSpace(lexical)
-  console.log('ul after space length', afterSpaces.length)
+  // console.log('ul after space length', afterSpaces.length)
   if (!afterSpaces) {
     lexical.backtrace(beforeSpaces.length + tag.length)
     return ''
@@ -207,7 +201,7 @@ const matchItems = (lexical) => {
   lines.tag = tag
 
   if (lines.nextItem) {
-    console.log('item lines => ', lines)
+    // console.log('item lines => ', lines)
     return {
       content: [lines].concat(lines.nextItem.content),
       length: tag.length + lines.length + lines.nextItem.length,
@@ -259,7 +253,7 @@ const list = middleware({
     const list = matchList(lexical)
 
     if (!list) return
-    console.log('list => ', list)
+    // console.log('list => ', list)
 
     const items$ = list.content
       .map(item => {
@@ -280,5 +274,4 @@ const list = middleware({
   }
 })
 
-// export default combine(normilize, list, paragraph)
 export default combine(normilize, list, paragraph)

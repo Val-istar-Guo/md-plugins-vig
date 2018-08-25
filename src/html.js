@@ -65,8 +65,6 @@ const parse = (string) => {
     } else n.children.push(s)
   }
 
-  // if (!/^((?:<!--(.*?)-->)|(?:<(.+?)\/>)|(?:<(.+?)>))/g.test(string)) return
-
   while (true) {
     if (!stack.length && node.children.length) {
       // 不是html标签开头字符串
@@ -159,15 +157,12 @@ const html = middleware({
     const nodes = parse(value)
     if (!nodes) return
 
-    console.log(nodes);
-
     return nodes.map(item => {
       // tag
       if (typeof item === 'object') {
         if (item.type === 'node') return htmlCreator(node)(item)
         else return annotationCreaotr(node)(item)
       }
-      console.log('item: ', `"${item}"`, typeof item)
       // string
       return inline(node)(item)
     })

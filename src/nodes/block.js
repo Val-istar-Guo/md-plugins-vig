@@ -15,8 +15,6 @@
 export default node => value => ({
   ...node('block', value),
   parse() {
-    console.log('block error')
-    console.log(`"${this.value}"`)
     throw new Error('something cannot be parse, and more plug-in?')
   },
 })

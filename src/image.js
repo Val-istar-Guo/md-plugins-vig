@@ -25,20 +25,6 @@ const image = middleware({
     const patt = /^!\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g;
 
     return lexical.match(patt, inline(node), imageCreator(node, placeholder))
-
-
-    // const matched = patt.exec(node.text)
-    // if (!matched) return node
-
-
-    // const [, alt, src, , title] = matched;
-    // const result = [vnode('img', { alt, src: src || placeholder, title })]
-
-    // if (node.text.length > patt.lastIndex) {
-    //   result.push(inline(node.text.substr(patt.lastIndex)))
-    // }
-
-    // return result
   },
 });
 

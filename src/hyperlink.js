@@ -17,21 +17,6 @@ const hyperlinkMiddleware = middleware({
       hyperlink(node)(href || placeholder, text, title)
 
     return lexical.match(patt, inline(node), hyperlinkCreator)
-
-    // const matched = patt.exec(node.text)
-    // if (!matched) return node
-
-    // const [, text, href = placeholder, , title] = matched
-
-    // const inline$ = inline(text)
-    // const result = [vnode('a', { href: href || placeholder, title }, [inline$])]
-
-
-    // if (node.text.length > patt.lastIndex) {
-    //   result.push(inline(node.text.substr(patt.lastIndex)))
-    // }
-
-    // return result
   },
 });
 
