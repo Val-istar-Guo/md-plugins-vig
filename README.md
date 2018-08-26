@@ -17,7 +17,6 @@ npm install highlight.js
 ## Support
 
 * normalize
-* highlight (code hightlight dependence highlight.js)
 * code
 * coseLineCode
 * atxHeader
@@ -45,9 +44,9 @@ you need to ```npm install highlight.js```
 
 ```javascript
 import md from 'md-core'
-import { plugins } from 'md-plugins-vig'
+import { vigMdPlugins } from 'md-plugins-vig'
 
-export default md().use(plugins)
+export default md().use(vigMdPlugins)
 ```
 
 
@@ -61,32 +60,24 @@ The order of reference of the plug-in may affect the priority and efficiency of 
 ```javascript
 import md from 'md-core';
 import {
-  normalize, atxHeader, setextHeader,
+  atxHeader, setextHeader,
   hr, list, blockquote, table, code, paragraph,
-  hyperlink, image, autolink, escaped,
+  hyperlink, image, autolink,
   inlineCode, inlineBold, inlineItalics,
-  coseLineCode, highlight, html, br,
-  splitChar,
+  coseLineCode, html, br,
 } from 'md-plugins-vig';
 
 
 export default md()
-  .use(normalize())
   .use(coseLineCode())
   .use(list())
   .use(code())
-  /**
-   * if you don't want to use highlight remove this plugin
-   * also don't need install highlight.js
-   */
-  .use(highlight())
   .use(atxHeader())
   .use(setextHeader())
   .use(hr())
   .use(blockquote())
   .use(table())
   .use(paragraph())
-  .use(escaped())
   .use(inlineCode())
   .use(inlineBold())
   .use(inlineItalics())
@@ -95,15 +86,9 @@ export default md()
   .use(autolink())
   .use(html())
   .use(br())
-  .use(splitChar())
 ```
 
 
-## Code Highlight
-
-if you use highlight plugin, you need to `import style_you_link from 'highligh.js/styles'`.
-you can preview style at [highlight.js](https://highlightjs.org/static/demo/),
-and chose what style you like.
-
 ## See More
 [md-core](https://github.com/Val-istar-Guo/md-core)
+[md-highlight](https://github.com/Val-istar-Guo/md-plugins-highlight)
