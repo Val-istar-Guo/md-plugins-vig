@@ -2,7 +2,7 @@
   "name": "md-plugins-vig",
   "version": "2.0.0-alpha.1",
   "description": "markdown parse",
-  "main": "dist/index.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "clean": "rm -rf ./dist/*",
     "build": "npm run clean & rollup -c",
@@ -40,7 +40,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "husky": "^0.14.3",
-    "mili": "0.0.3",
+    "mili": "0.0.4",
     "rollup": "^0.58.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^9.1.0",
