@@ -36,14 +36,21 @@ npm install md-plugins-vig
 
 ### Default config
 
-Default config include highlight plugin that dependence highlight.js
-you need to ```npm install highlight.js```
-
 ```javascript
+// md.js
 import md from 'md-core'
 import { vigMdPlugins } from 'md-plugins-vig'
 
 export default md().use(vigMdPlugins())
+```
+
+and then
+
+```javascript
+import md from './md.js'
+
+md.parse('# title').toHTML()
+// => <h1>title</h1>
 ```
 
 
@@ -87,5 +94,6 @@ export default md()
 
 
 ## See More
+
 [md-core](https://github.com/Val-istar-Guo/md-core)
 [md-highlight](https://github.com/Val-istar-Guo/md-plugins-highlight)
