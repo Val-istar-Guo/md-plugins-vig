@@ -1,5 +1,6 @@
-export default node => (content, language) => ({
+export default node => (content, language = '') => ({
   ...node('code', content),
+  language,
   parse(h) {
     const { value, language } = this
 

@@ -9,9 +9,6 @@
 
 ```bash
 npm install md-plugins-vig
-
-# if you need highlight code
-npm install highlight.js
 ```
 
 ## Support
@@ -46,7 +43,7 @@ you need to ```npm install highlight.js```
 import md from 'md-core'
 import { vigMdPlugins } from 'md-plugins-vig'
 
-export default md().use(vigMdPlugins)
+export default md().use(vigMdPlugins())
 ```
 
 

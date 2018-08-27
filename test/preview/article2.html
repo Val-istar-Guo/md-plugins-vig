@@ -21,7 +21,7 @@
 <p>Webpack 提供 Hot Reload 支持，Vue本身也支持 Hot Reload。因此，仅需在 webpack 配置文件中进行如下配置：
 
 </p>
-<pre><code>{
+<pre><code class="javascript">{
   // More Config...
   bundle: [
     'Your Entry File',
@@ -70,10 +70,10 @@
 ，webpack 配置如下：
 
 </p>
-<pre><code>// empty.js
+<pre><code class="javascript">// empty.js
 export default null;</code>
 </pre>
-<pre><code>// webpack.config.ssr.js
+<pre><code class="javascript">// webpack.config.ssr.js
 {
   // More Config...
   resolve: {
@@ -85,7 +85,7 @@ export default null;</code>
   // More Config...
 }</code>
 </pre>
-<pre><code>// webpack.config.client.js & webpack.config.client.dev.js
+<pre><code class="javascript">// webpack.config.client.js & webpack.config.client.dev.js
 {
   // More Config...
   resolve: {
@@ -102,7 +102,7 @@ export default null;</code>
 。在使用的时候要注意，在服务端渲染时chart.js会被empty.js代替。
 
 </p>
-<pre><code>import Chart from 'chart';
+<pre><code class="javascript">import Chart from 'chart';
 
 if (Chart !== null) {
   // running on client;
@@ -118,7 +118,7 @@ if (Chart !== null) {
 文件中。server/client/ssr等部分的webpack配置均从此文件中导入响应配置。
 
 </p>
-<pre><code>import path from 'path';
+<pre><code class="javascript">import path from 'path';
 
 
 // 扩展配置
