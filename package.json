@@ -10,7 +10,8 @@
     "prepublishOnly": "npm test; npm run build",
     "precommit": "npm test",
     "premili:upgrade": "npm install mili@latest -D",
-    "mili:upgrade": "mili upgrade"
+    "mili:upgrade": "mili upgrade",
+    "updateSnapshots": "ava -u"
   },
   "keywords": [
     "markdown",
@@ -40,7 +41,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "husky": "^0.14.3",
-    "mili": "0.0.4",
+    "mili": "0.0.5",
     "rollup": "^0.58.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^9.1.0",

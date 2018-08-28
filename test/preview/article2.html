@@ -24,8 +24,8 @@
 <pre><code class="javascript">{
   // More Config...
   bundle: [
-    'Your Entry File',
-    'webpack-hot-middleware/client',
+    &#39;Your Entry File&#39;,
+    &#39;webpack-hot-middleware/client&#39;,
   ],
   // More Config...
 }</code>
@@ -79,19 +79,19 @@ export default null;</code>
   resolve: {
     // More Config...
     alias: {
-      chart: path.resolve(__dirname, 'empty'),
+      chart: path.resolve(__dirname, &#39;empty&#39;),
     },
   },
   // More Config...
 }</code>
 </pre>
-<pre><code class="javascript">// webpack.config.client.js & webpack.config.client.dev.js
+<pre><code class="javascript">// webpack.config.client.js &amp; webpack.config.client.dev.js
 {
   // More Config...
   resolve: {
     // More Config...
     alias: {
-      chart: 'chart.js',
+      chart: &#39;chart.js&#39;,
     },
   },
   // More Config...
@@ -102,7 +102,7 @@ export default null;</code>
 。在使用的时候要注意，在服务端渲染时chart.js会被empty.js代替。
 
 </p>
-<pre><code class="javascript">import Chart from 'chart';
+<pre><code class="javascript">import Chart from &#39;chart&#39;;
 
 if (Chart !== null) {
   // running on client;
@@ -118,38 +118,38 @@ if (Chart !== null) {
 文件中。server/client/ssr等部分的webpack配置均从此文件中导入响应配置。
 
 </p>
-<pre><code class="javascript">import path from 'path';
+<pre><code class="javascript">import path from &#39;path&#39;;
 
 
 // 扩展配置
 export default {
-  ssrFileName: 'vue-ssr-bundle.json',
-  manifestFileName: 'vue-ssr-manifest.json',
+  ssrFileName: &#39;vue-ssr-bundle.json&#39;,
+  manifestFileName: &#39;vue-ssr-manifest.json&#39;,
   /**
    * 非同构模块, 不可用于ssr在server端运行
    * 会被默认替代为empty.js
    * 需要在代码中进行兼容处理
    */
   nonIsomorphicModule: {
-    // chart: 'chart.js',
+    // chart: &#39;chart.js&#39;,
   },
 
   // 非JS模块，不可用于ssr, ssr代码需要在nodejs中运行
   nonJsModule: [
-    'normalize.css',
+    &#39;normalize.css&#39;,
   ],
 
   // 外部依赖库，打包成独立js包
   lib: [
-    'vue',
-    'vuex',
-    'vue-router',
-    'detect-env',
-    'superagent',
+    &#39;vue&#39;,
+    &#39;vuex&#39;,
+    &#39;vue-router&#39;,
+    &#39;detect-env&#39;,
+    &#39;superagent&#39;,
   ],
 
   alias: {
-    framework: path.resolve(__dirname, '../framework'),
+    framework: path.resolve(__dirname, &#39;../framework&#39;),
   },
 }</code>
 </pre>
