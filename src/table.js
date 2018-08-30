@@ -1,6 +1,6 @@
 import { middleware, combine } from 'md-core/utils'
 import { version } from '../package.json';
-import { block, text } from './nodes'
+import { block, inline } from './nodes'
 import normalize from './normilize'
 import paragraph from './paragraph'
 
@@ -52,26 +52,57 @@ const parseTHead = (aligns, maxL, line, autoFill) => {
 };
 
 
-const tableCreator = node => (thead, tbody) => ({
-  ...node('table'),
+const thAstNode = node => ({ align, content }) => ({
+  ...node('th', [inline(node)(content)]),
+  align,
+  parse(h) {
+    const { children } = this
+    return h('th', { class: align, style: `text-align: ${align}` }, children.map(child => child.parse(h)))
+  }
+})
+
+const theadAstNode = node => (thead) => ({
+  ...node('thead', thead.map(thAstNode(node))),
+  parse(h) {
+    const { children } = this;
+    return h('thead', {}, [
+      h('tr', {}, children.map(child => child.parse(h)))
+    ])
+  }
+})
+
+const tdAstNode = node => ({ align, content }) => ({
+  ...node('td', [inline(node)(content)]),
+  align,
+  parse(h) {
+    const { children } = this
+    return h('td', { class: align, style: `text-align: ${align}` }, children.map(child => child.parse(h)))
+  }
+})
+
+const trAstNode = node => tr => ({
+  ...node('tr', tr.map(tdAstNode(node))),
+  parse(h) {
+    const { children } = this
+    return h('tr', {}, children.map(child => child.parse(h)))
+  }
+})
+
+const tbodyAstNode = node => tbody => ({
+  ...node('tbody', tbody.map(trAstNode(node))),
+  parse(h) {
+    const { children } = this
+    return h('tbody', {}, children.map(child => child.parse(h)))
+  }
+})
+
+const tableAstNode = node => (thead, tbody) => ({
+  ...node('table', [theadAstNode(node)(thead), tbodyAstNode(node)(tbody)]),
   thead,
   tbody,
   parse(h) {
-    const { thead, tbody } = this
-
-    const thead$ = h('thead', {}, [
-      h('tr', {}, thead.map(({ align, content }) =>
-        h('th', { class: align, style: `text-align: ${align}` }, [content])
-      ))
-    ])
-
-    const tbody$ = h('tbody', {}, tbody.map(tr =>
-      h('tr', {}, tr.map(({ align, content }) =>
-        h('td', { class: align, style: `text-align: ${align}` }, [content])
-      ))
-    ))
-
-    return h('table', {}, [thead$, tbody$])
+    const { children } = this
+    return h('table', {}, children.map(child => child.parse(h)))
   }
 })
 
@@ -95,7 +126,7 @@ const table = middleware({
       const tbody = parseTBody(aligns, maxL, tbodyString, autoFill);
       const thead = parseTHead(aligns, maxL, theadString);
 
-      return tableCreator(node)(thead, tbody)
+      return tableAstNode(node)(thead, tbody)
     })
   },
 });
