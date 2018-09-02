@@ -11,27 +11,6 @@
 npm install md-plugins-vig
 ```
 
-## Support
-
-* normalize
-* code
-* coseLineCode
-* atxHeader
-* setexHeader
-* list
-* blockquote
-* table
-* hr
-* paragraph
-* escaped
-* inlineCode
-* inlineBold
-* inlineItalics
-* hyperlink
-* image
-* autolink
-* html
-
 ## Usage
 
 ### Default config
@@ -91,6 +70,27 @@ export default md()
   .use(html())
   .use(br())
 ```
+
+
+## Support
+
+* code
+* coseLineCode
+* atxHeader
+* setexHeader
+* list
+* blockquote
+* table
+* hr
+* paragraph
+* escaped
+* inlineCode
+* inlineBold
+* inlineItalics
+* hyperlink
+* image
+* autolink
+* html
 
 
 ## See More
