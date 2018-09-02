@@ -14,7 +14,10 @@ test.before(t => {
   const createPrivew = body => `<html><body>${body}</body></html>`
 
   const articlePath = join(__dirname, 'articles')
-  const fileNames = fs.readdirSync(articlePath).filter(fileName => !fileName.includes('todo'))
+  let fileNames = fs.readdirSync(articlePath).filter(fileName => !fileName.includes('.todo.'))
+  const onlyFileNames = fileNames.filter(fileName => fileName.includes('.only.'))
+  if (onlyFileNames.length) fileNames = onlyFileNames
+
   const files = fileNames.map(fileName => fs.readFileSync(join(articlePath, fileName), 'utf8'))
 
   fileNames
@@ -23,7 +26,7 @@ test.before(t => {
       const astTree = parse(files[i])
 
       fs.writeFile(
-        join(__dirname, 'preview', fileName),
+        join(__dirname, 'preview', fileName.replace('.only.', '.')),
         createPrivew(astTree.toHTML({ separator: '\n' })),
         err => err && console.log(err),
       )

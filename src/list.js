@@ -46,10 +46,11 @@ const matchIndentLine = (lexical, indent) => {
     }
   }
 
+  const indentSpace = buffer.join('')
+
   const line = matchLine(lexical, indent)
-  while(!lexical.end) {
-    const char = lexical.next()
-  }
+  return { ...prefix(line, indentSpace), indent }
+
 }
 
 const matchLine = (lexical, indent) => {
@@ -80,7 +81,7 @@ const matchLine = (lexical, indent) => {
   }
 
   const content = beforeSpaces + buffer.join('')
-  // console.log('match content: ', content)
+  // console.log('match content: ', `"${content}"`)
 
   const nextItem = matchItems(lexical)
   // console.log('match content items: ', !!nextItem)
@@ -102,10 +103,11 @@ const matchEmptyLine = (lexical, indent) => {
 
   while(!lexical.end) {
     const char = lexical.next()
-    if (/\s/.test(char)) buffer.push(char)
-    else if (char === '\n') {
+    if (char === '\n') {
       buffer.push(char)
       break
+    } else if (/\s/.test(char)) {
+      buffer.push(char)
     } else {
       lexical.backtrace(buffer.length + 1)
       return null
@@ -199,6 +201,7 @@ const matchItems = (lexical) => {
 
   const lines = matchEmptyLine(lexical, indent) || matchLine(lexical, indent)
   lines.tag = tag
+  lines.content = lines.content.replace(new RegExp(`\\n {${indent}}`, 'g'), '\n')
 
   if (lines.nextItem) {
     // console.log('item lines => ', lines)
@@ -249,7 +252,8 @@ const list = middleware({
   version,
   name: 'list',
   input: 'block',
-  parse: ({ lexical }, node) => {
+  parse: ({ lexical, value }, node) => {
+    // console.log('input', `"${value}"`)
     const list = matchList(lexical)
 
     if (!list) return
