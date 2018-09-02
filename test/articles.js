@@ -11,7 +11,7 @@ test.before(t => {
     .use(vigMdPlugins())
     .parse
 
-  const createPrivew = body => `<html><body>${body}</body></html>`
+  const createPrivew = body => `<html><head><link rel="stylesheet" type="text/css" href='./style.css' /></head><body>${body}</body></html>`
 
   const articlePath = join(__dirname, 'articles')
   let fileNames = fs.readdirSync(articlePath).filter(fileName => !fileName.includes('.todo.'))
@@ -20,17 +20,31 @@ test.before(t => {
 
   const files = fileNames.map(fileName => fs.readFileSync(join(articlePath, fileName), 'utf8'))
 
-  fileNames
+  fileNames = fileNames
     .map(fileName => `${basename(fileName, '.md')}.html`)
+    .map(fileName => fileName.replace('.only.', '.'))
+
+  fileNames
     .forEach((fileName, i) => {
       const astTree = parse(files[i])
 
       fs.writeFile(
-        join(__dirname, 'preview', fileName.replace('.only.', '.')),
+        join(__dirname, 'preview', fileName),
         createPrivew(astTree.toHTML({ separator: '\n' })),
         err => err && console.log(err),
       )
     })
+
+  const catalogue = fileNames
+    .map(fileName => `<li><a href="./${fileName}">${fileName}</a></li>`)
+    .join('')
+
+  fs.writeFile(
+    join(__dirname, 'preview', 'index.html'),
+    createPrivew(catalogue),
+    // `<html><body>${catalogue}</body></html>`,
+    err => err && console.log(err),
+  )
 
   t.context.parse = parse
   t.context.files = files

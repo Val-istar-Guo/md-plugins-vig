@@ -1,0 +1,55 @@
+body {
+  font-family: 'PingFang SC';
+  font-size: 18px;
+  font-weight: 300;
+  color: #4A4A4A;
+  line-height: 32px;
+
+}
+
+h6 {
+  text-align: center;
+  color: #333;
+}
+
+code {
+  background: #f7f7f7;
+  border-radius: 2px;
+  padding: 4px;
+}
+
+pre {
+  overflow-x: auto;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #f7f7f7;
+  padding: 10px 20px;
+
+}
+
+pre code {
+  background: initial;
+  border-radius: initial;
+  padding: initial;
+}
+
+pre * {
+  font-family: Monospace !important;
+}
+
+h6 {
+  font-size: 16px;
+}
+
+a {
+  color: #EF4459;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  text-indent: 36px;
+}
