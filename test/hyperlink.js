@@ -39,6 +39,13 @@ test(
   '<p><a href="miaooo.me" title="my blog">blog</a></p>'
 )
 
+test(
+  'parse hyper link with escaped',
+  parse,
+  "\\[blog](miaooo.me 'my blog')",
+  '<p>[blog](miaooo.me &#39;my blog&#39;)</p>'
+)
+
 test.todo(
   'parse hyper link to nested image',
 )

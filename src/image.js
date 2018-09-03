@@ -1,8 +1,9 @@
-import { combine, middleware } from 'md-core/utils';
-import { version } from '../package.json';
+import { combine, middleware } from 'md-core/utils'
+import { version } from '../package.json'
 import { inline } from './nodes'
 import paragraph from './paragraph'
 import text from './text'
+import exclamationEscaped from './escaped/exclamation'
 
 
 const imageCreator = (node, placeholder) => ([, alt, src, , title]) => ({
@@ -28,4 +29,4 @@ const image = middleware({
   },
 });
 
-export default combine(paragraph, image, text)
+export default combine(exclamationEscaped, paragraph, image, text)

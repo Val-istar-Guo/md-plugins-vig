@@ -3,6 +3,7 @@ import { version } from '../package.json';
 import { inline, hyperlink } from './nodes'
 import text from './text'
 import paragraph from './paragraph'
+import angleBracketsEscaped from './escaped/angleBrackets'
 
 
 const emailLink = node => email => ({
@@ -25,10 +26,11 @@ const autolink = middleware({
   name: 'autolink',
   input: 'inline',
   parse: ({ lexical }, node) => {
-    const patt = /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/g;
+    const patt = /^<(?:((https?|ftp|mailto):[^>\\]+)|(.*?@.*?\.[a-zA-Z]+))(?!\\)>/g;
 
     return lexical.match(patt, inline(node), autolinkCreator(node))
   },
 });
 
-export default combine(paragraph, autolink, text)
+
+export default combine(angleBracketsEscaped, paragraph, autolink, text)

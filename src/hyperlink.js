@@ -1,8 +1,10 @@
-import { combine, middleware } from 'md-core/utils';
+import { combine, middleware } from 'md-core/utils'
 import { version } from '../package.json';
-import { inline, hyperlink } from './nodes';
+import { inline, hyperlink } from './nodes'
 import paragraph from './paragraph'
 import text from './text'
+import squareBracketsEscaped from './escaped/squareBrackets'
+
 
 
 const hyperlinkMiddleware = middleware({
@@ -20,4 +22,4 @@ const hyperlinkMiddleware = middleware({
   },
 });
 
-export default combine(paragraph, hyperlinkMiddleware, text)
+export default combine(squareBracketsEscaped, paragraph, hyperlinkMiddleware, text)

@@ -52,3 +52,10 @@ test(
   '![](www.image.link "image title")',
   '<p><img src="www.image.link" title="image title" /></p>'
 )
+
+test(
+  'parse image with escaped',
+  parse,
+  '\\![](www.image.link "image title")',
+  '<p>![](www.image.link &quot;image title&quot;)</p>',
+)

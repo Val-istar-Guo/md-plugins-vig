@@ -30,3 +30,31 @@ test(
   '<val.istar.guo@gmail.com>',
   '<p><a href="mailto:val.istar.guo@gmail.com">val.istar.guo@gmail.com</a></p>'
 )
+
+test(
+  'parse http autolink escaped at begin',
+  parse,
+  '\\<http://miaooo.me>',
+  '<p>&lt;http://miaooo.me&gt;</p>'
+)
+
+test(
+  'parse http autolink escaped at end',
+  parse,
+  '<http://miaooo.me\\>',
+  '<p>&lt;http://miaooo.me&gt;</p>'
+)
+
+test(
+  'parse email autolink escaped at begin',
+  parse,
+  '\\<val.istar.guo@gmail.com>',
+  '<p>&lt;val.istar.guo@gmail.com&gt;</p>'
+)
+
+test(
+  'parse email autolink escaped at end',
+  parse,
+  '<val.istar.guo@gmail.com\\>',
+  '<p>&lt;val.istar.guo@gmail.com&gt;</p>'
+)

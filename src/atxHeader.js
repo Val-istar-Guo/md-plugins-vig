@@ -1,8 +1,9 @@
 import { middleware, combine } from 'md-core/utils'
-import { version } from '../package.json';
-import { header, block, inline } from './nodes'
+import { version } from '../package.json'
+import { header, block, inline, text } from './nodes'
 import normilize from './normilize'
 import paragraph from './paragraph'
+import poundEscaped from './escaped/pound'
 
 
 const headerCreator = node => ([, level, content]) =>
@@ -28,4 +29,4 @@ const escaped = middleware({
   },
 })
 
-export default combine(normilize, atxHeader, escaped, paragraph)
+export default combine(normilize, atxHeader, poundEscaped, paragraph)

@@ -17,18 +17,37 @@ test(
   '<h1>aaaa</h1>'
 )
 
-test.todo(
+test(
   'parse atx header syntax with overmuch #',
+  parse,
+  '####### aaaa',
+  '<h6># aaaa</h6>'
 )
 
-test.todo(
-  'parse atx header syntax with same amount of # suffix'
+test(
+  'parse atx header syntax with same amount of # suffix',
+  parse,
+  '### aaa ###',
+  '<h3>aaa</h3>'
 )
 
-test.todo(
-  'parse atx header syntax with overmuch # suffix'
+test(
+  'parse atx header syntax with overmuch # suffix',
+  parse,
+  '### aaa ####',
+  '<h3>aaa</h3>'
 )
 
-test.todo(
-  'parse atx header syntax with lacking # suffix'
+test(
+  'parse atx header syntax with lacking # suffix',
+  parse,
+  '### aaa##',
+  '<h3>aaa</h3>'
+)
+
+test(
+  'parse atx header content escaped #',
+  parse,
+  '###\\#aaa###',
+  '<h3>#aaa</h3>'
 )

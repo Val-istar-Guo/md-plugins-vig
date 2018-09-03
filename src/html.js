@@ -1,8 +1,8 @@
 import { middleware, combine, htmlDecode } from 'md-core/utils'
-import { version } from '../package.json';
+import { version } from '../package.json'
 import paragraph from './paragraph'
 import text from './text'
-import { inline, text as textNode } from './nodes';
+import { inline, text as textNode } from './nodes'
 
 
 const combineString = arr => {

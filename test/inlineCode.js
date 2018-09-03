@@ -24,4 +24,11 @@ test(
   '<p><code>`code text</code></p>'
 )
 
+test.todo(
+  'parse inline code that include escaped',
+  // parse,
+  // '`````code text\\````',
+  // '<p><code>`code text`</code></p>'
+)
+
 test.todo('parse inline code with extra backquote')

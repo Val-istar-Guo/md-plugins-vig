@@ -3,6 +3,8 @@ import { version } from '../package.json';
 import { inline } from './nodes'
 import paragraph from './paragraph'
 import text from './text'
+import asteriskEscaped from './escaped/asterisk'
+import underscoreEscaped from './escaped/underscore'
 
 
 const typeName = {
@@ -24,10 +26,10 @@ const inlineItalics = middleware({
   name: 'inline-italics',
   input: 'inline',
   parse: ({ lexical }, node) => {
-    const patt = /^([*_])((?:\s|\S)+)(?!\\)\1/g
+    const patt = /^([*_])((?:\s|\S)+?)\1/g
     return lexical.match(patt, inline(node), italicsCreator(node))
   },
 })
 
 
-export default combine(paragraph, inlineItalics, text)
+export default combine(asteriskEscaped, underscoreEscaped, paragraph, inlineItalics, text)

@@ -28,5 +28,19 @@ test(
   'parse bold syntax that include escaped char',
   parse,
   'x**bold \\* text**',
-  '<p>x<strong class="asterisk">bold \\* text</strong></p>'
+  '<p>x<strong class="asterisk">bold * text</strong></p>'
+)
+
+test(
+  'parse bold syntax that begin with escaped char',
+  parse,
+  'x\\*\\*bold text**',
+  '<p>x**bold text**</p>'
+)
+
+test.todo(
+  'parse bold syntax that end with escaped char',
+  // parse,
+  // 'x**bold text\\**',
+  // '<p>x**bold text\\**</p>'
 )

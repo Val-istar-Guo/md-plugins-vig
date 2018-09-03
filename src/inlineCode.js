@@ -1,8 +1,9 @@
 import { combine, middleware } from 'md-core/utils'
-import { version } from '../package.json';
+import { version } from '../package.json'
 import { inline } from './nodes'
 import paragraph from './paragraph'
 import text from './text'
+import backquote from './escaped/backquote'
 
 
 const inlineCodeCreator = node => ([, , value]) => ({
@@ -23,4 +24,4 @@ const inlineCode = middleware({
   },
 });
 
-export default combine(paragraph, inlineCode, text)
+export default combine(backquote, paragraph, inlineCode, text)
