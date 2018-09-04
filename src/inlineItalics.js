@@ -26,7 +26,7 @@ const inlineItalics = middleware({
   name: 'inline-italics',
   input: 'inline',
   parse: ({ lexical }, node) => {
-    const patt = /^([*_])((?:\s|\S)+?)\1/g
+    const patt = /^([*_])((?:\s|\S)*?[^\\])\1/g
     return lexical.match(patt, inline(node), italicsCreator(node))
   },
 })

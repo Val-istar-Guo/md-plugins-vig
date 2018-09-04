@@ -30,18 +30,18 @@ test(
   '<p>_italics text_</p>',
 )
 
-test.todo(
+test(
   'parse italics syntax that end with escaped',
-  // parse,
-  // '_italics text\\_',
-  // '<p>_italics text_</p>',
+  parse,
+  '_italics text\\_',
+  '<p>_italics text_</p>',
 )
 
-test.todo(
+test(
   'parse italics syntax that include escaped',
-  // parse,
-  // '_italics \\_text__',
-  // '<p><em class="underline">italics _text</em></p>_',
+  parse,
+  '_italics \\_text__',
+  '<p><em class="underline">italics _text</em>_</p>',
 )
 
 test.todo(

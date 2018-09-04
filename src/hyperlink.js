@@ -12,11 +12,11 @@ const hyperlinkMiddleware = middleware({
   name: 'hyperlink',
   input: 'inline',
   parse: ({ lexical }, node, option) => {
-    const patt = /^\[\s*([^\]\[]*)\s*\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g
+    const patt = /^\[(.*?[^\\])\]\(\s*(\S*?)(?:\s+(["'])(.*?)\3)?\s*\)/g
 
     const { placeholder = '' } = option
     const hyperlinkCreator = ([, text, href = placeholder, , title]) =>
-      hyperlink(node)(href || placeholder, text, title)
+      hyperlink(node)(href || placeholder, text.replace(/(^\s*)|(\s*$)/g, ''), title)
 
     return lexical.match(patt, inline(node), hyperlinkCreator)
   },

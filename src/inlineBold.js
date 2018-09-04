@@ -27,7 +27,7 @@ const inlineBold = middleware({
   name: 'inline-bold',
   input: 'inline',
   parse: ({ lexical }, node) => {
-    const patt = /^(([*_])\2)((?:\s|\S)+?)\1/g
+    const patt = /^(([*_])\2)((?:\s|\S)*?[^\\])\1/g
     return lexical.match(patt, inline(node), boldCreator(node))
   },
 });

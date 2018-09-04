@@ -38,9 +38,9 @@ test(
   '<p>x**bold text**</p>'
 )
 
-test.todo(
+test(
   'parse bold syntax that end with escaped char',
-  // parse,
-  // 'x**bold text\\**',
-  // '<p>x**bold text\\**</p>'
+  parse,
+  'x**bold text\\**',
+  '<p>x**bold text**</p>'
 )
